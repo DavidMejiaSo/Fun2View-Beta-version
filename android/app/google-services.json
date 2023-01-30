@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "927063479128",
+    "project_id": "fun2view-24d57",
+    "storage_bucket": "fun2view-24d57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927063479128:android:42c7a8b4ebb6ddb6b1cb2d",
+        "android_client_info": {
+          "package_name": "com.example.fun2view_appli"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927063479128-u0nbjvm7lof98dku6fsuacpv1042t4vp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPtma4HArWcz40XXkYvoP2wFhEdM61P8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927063479128-u0nbjvm7lof98dku6fsuacpv1042t4vp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
