@@ -85,8 +85,8 @@ class _Pageppal extends State<Pageppal> {
         drawer: Drawer(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(90),
-                bottomRight: Radius.circular(180)),
+                topRight: Radius.circular(70),
+                bottomRight: Radius.circular(400)),
           ),
           elevation: 2.5,
           child: ListView(
@@ -308,7 +308,7 @@ class _Pageppal extends State<Pageppal> {
           _key.currentState!.openDrawer();
         },
         child: Container(
-          color: Color.fromARGB(255, 243, 243, 243),
+          color: Color.fromARGB(255, 255, 255, 255),
           child: Column(
             children: [
               Container(
@@ -697,6 +697,7 @@ class _Pageppal extends State<Pageppal> {
 
   Widget newPublication() {
     return Card(
+      shadowColor: Colors.grey,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
@@ -775,7 +776,7 @@ class _Pageppal extends State<Pageppal> {
                             return Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
-                                color: Color.fromARGB(0, 148, 141, 141),
+                                color: Colors.transparent,
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: Column(
@@ -795,13 +796,11 @@ class _Pageppal extends State<Pageppal> {
                                                       imageQuality: 100);
 
                                               if (pickedFile == null) {
-                                                print("nada de nada");
                                                 setState(() {});
                                                 return;
                                               }
                                               setState(() {});
-                                              print(
-                                                  "Aqui tenemos esto ${pickedFile.path}");
+
                                               pathImage = pickedFile.path;
                                               List<int> bytes =
                                                   await new File(pathImage)
@@ -812,33 +811,23 @@ class _Pageppal extends State<Pageppal> {
 
                                               setState(() {});
                                             },
-                                            child: Container(
-                                              height: Adapt.hp(8),
-                                              width: Adapt.wp(8),
-                                              decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      "assets/iconos/galeriaIcon.png"),
-                                                ),
+                                            child: CircleAvatar(
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 247, 247, 247),
+                                              radius: 28.5,
+                                              child: Container(
+                                                height: Adapt.hp(8),
+                                                width: Adapt.wp(8),
+                                                child: Image.asset(
+                                                    "assets/iconos/galeriaIcon.png"),
                                               ),
                                             ),
                                           ),
                                           SizedBox(
-                                            height: Adapt.hp(10),
+                                            height: Adapt.hp(5),
                                           ),
-                                          ElevatedButton(
-                                            style: styleOK2,
-                                            child: Container(
-                                              height: Adapt.hp(8),
-                                              width: Adapt.wp(8),
-                                              decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      "assets/iconos/camaraIcon.png"),
-                                                ),
-                                              ),
-                                            ),
-                                            onPressed: () async {
+                                          GestureDetector(
+                                            onTap: () async {
                                               final picker = new ImagePicker();
                                               final PickedFile? pickedFile =
                                                   await picker.getImage(
@@ -848,7 +837,7 @@ class _Pageppal extends State<Pageppal> {
 
                                               if (pickedFile == null) {
                                                 setState(() {});
-                                                print("nada de nada");
+
                                                 return;
                                               }
                                               setState(() {});
@@ -862,23 +851,41 @@ class _Pageppal extends State<Pageppal> {
                                               _imageSend = base64.encode(bytes);
                                               Navigator.of(context).pop();
                                             },
+                                            child: CircleAvatar(
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 247, 247, 247),
+                                              radius: 28.5,
+                                              child: Container(
+                                                height: Adapt.hp(8),
+                                                width: Adapt.wp(8),
+                                                child: Image.asset(
+                                                    "assets/iconos/camaraIcon.png"),
+                                              ),
+                                            ),
                                           )
                                         ],
                                       ),
                                       SizedBox(height: Adapt.hp(5)),
-                                      ElevatedButton(
-                                        style: styleOK,
-                                        child: Text(
-                                          "Cancelar",
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        onPressed: () {
+                                      GestureDetector(
+                                        onTap: () {
                                           Navigator.of(context).pop();
                                           setState(() {});
                                         },
+                                        child: CircleAvatar(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 93, 181, 248),
+                                          radius: 20.5,
+                                          child: Center(
+                                            child: Text(
+                                              "X",
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255)),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                       SizedBox(height: Adapt.hp(5)),
                                     ],
@@ -1022,7 +1029,7 @@ class _Pageppal extends State<Pageppal> {
           alignment: Alignment.center,
           child: Stack(
             children: [
-              CircularProgressIndicator(),
+              Center(child: CircularProgressIndicator()),
               Container(
                   height: Adapt.hp(30),
                   width: Adapt.wp(40),
