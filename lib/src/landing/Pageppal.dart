@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../Notifications/listadoNotis.dart';
 import '../Preferencias/preferencias.dart';
 import 'alert_dialog.dart/alert_dialog.dart';
 
@@ -28,6 +29,7 @@ class _Pageppal extends State<Pageppal> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool _check = false;
   bool _mostrarPassword = true;
+  dynamic notificaciones = UserSimplePreferences.getPets();
 
   String _usuario = '';
   String _password = '';
@@ -39,6 +41,7 @@ class _Pageppal extends State<Pageppal> {
   List<dynamic> postsTDes = [];
   List<dynamic> mediaImagen = [];
   List<dynamic> Imagenes = [];
+  bool notis = false;
 
   final ButtonStyle styleOK = ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -240,17 +243,17 @@ class _Pageppal extends State<Pageppal> {
                 ),
                 title: Text('Notification'),
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialogCustom(
-                        bodyText: "Estamos Actualizando**",
-                        bottonAcept: 'false',
-                        bottonCancel: Container(),
-                      );
-                    },
-                  );
-                  // Navigator.pushNamed(context, '/NotificationPage');
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return AlertDialogCustom(
+                  //       bodyText: "Estamos Actualizando**",
+                  //       bottonAcept: 'false',
+                  //       bottonCancel: Container(),
+                  //     );
+                  //   },
+                  // );
+                  Navigator.pushNamed(context, '/NotificationPage');
                 },
               ),
               SizedBox(
@@ -277,6 +280,7 @@ class _Pageppal extends State<Pageppal> {
                   title: Text('Logout'),
                   onTap: () {
                     Navigator.restorablePushNamed(context, '/login');
+                    prefs.limpiar();
                   }),
             ],
           ),
@@ -301,78 +305,183 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
-  Widget Cuerpo_pantalla() {
+  Widget listadoNotis(List items) {
     return SingleChildScrollView(
-      child: GestureDetector(
-        onDoubleTap: () {
-          _key.currentState!.openDrawer();
-        },
-        child: Container(
-          color: Color.fromARGB(255, 255, 255, 255),
-          child: Column(
+      child: ListView.builder(
+        //physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+
+          return Stack(
             children: [
-              Container(
-                height: Adapt.hp(10),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: Adapt.hp(2),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: Adapt.wp(3),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            _key.currentState!.openDrawer();
-                          },
-                          child:
-                              AvataruserII(), //COntainer para evitar usar Scaffold
-                        ),
-                        SizedBox(
-                          width: Adapt.wp(10),
-                        ),
-                        Container(
-                          width: Adapt.wp(50),
-                          child: Image(image: AssetImage("assets/fun2vie.png")),
-                        )
-                      ],
-                    ),
-                  ],
+              Padding(
+                padding:
+                    EdgeInsets.only(left: Adapt.px(20), right: Adapt.px(20)),
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Adapt.px(20), vertical: Adapt.px(10)),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: Adapt.px(30), vertical: Adapt.px(7)),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: Adapt.wp(5),
+                          ),
+                          Container(
+                            width: Adapt.wp(10),
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat-ExtraBold',
+                                  fontSize: Adapt.px(10)),
+                            ),
+                          )
+                        ],
+                      )),
                 ),
               ),
-              ImagenesAvatarPortada(),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget NotisLista() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Color.fromARGB(255, 255, 255, 255),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(30),
+          )),
+      height: Adapt.hp(30),
+      width: Adapt.wp(50),
+      child: listadoNotis(UserSimplePreferences.getPets() ?? []),
+    );
+  }
+
+  Widget barraPpal() {
+    return Container(
+      color: Colors.white,
+      height: Adapt.hp(11),
+      width: double.infinity,
+      child: Column(
+        children: [
+          SizedBox(
+            height: Adapt.hp(3),
+          ),
+          Row(
+            children: [
               SizedBox(
-                height: Adapt.hp(3),
+                width: Adapt.wp(3),
               ),
-              Nameuser(),
+              GestureDetector(
+                onTap: () {
+                  _key.currentState!.openDrawer();
+                },
+                child: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                  radius: 28.5,
+                  child: Container(
+                      height: Adapt.hp(10),
+                      width: Adapt.wp(10),
+                      child: Image.asset("assets/iconos/menu.png")),
+                ), //COntainer para evitar usar Scaffold
+              ),
               SizedBox(
-                height: Adapt.hp(2),
+                width: Adapt.wp(10),
               ),
-              Align(
-                  alignment: Alignment.center,
-                  child: Container(width: Adapt.wp(90), child: NameuserDes())),
+              Container(
+                width: Adapt.wp(50),
+                child: Image(image: AssetImage("assets/fun2vie.png")),
+              ),
               SizedBox(
-                height: Adapt.hp(8),
+                width: Adapt.wp(5),
               ),
-              Itemsuser(),
-              SizedBox(
-                height: Adapt.hp(8),
-              ),
-              newPublication(),
-              SizedBox(
-                height: Adapt.hp(2),
-              ),
-              notificationsList(),
-              SizedBox(
-                height: Adapt.hp(5),
-              ),
+              GestureDetector(
+                onTap: () {
+                  notis = true;
+                  setState(() {});
+                },
+                child: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                  radius: 28.5,
+                  child: Container(
+                      height: Adapt.hp(7),
+                      width: Adapt.wp(7),
+                      child:
+                          Image.asset("assets/iconos/drawer/Notificacion.png")),
+                ),
+              ), //COntainer para evitar usar Scaffold
             ],
           ),
-        ),
+        ],
       ),
+    );
+  }
+
+  Widget Cuerpo_pantalla() {
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: GestureDetector(
+            onDoubleTap: () {
+              _key.currentState!.openDrawer();
+            },
+            child: Container(
+              color: Color.fromARGB(255, 255, 255, 255),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: Adapt.hp(12),
+                  ),
+                  ImagenesAvatarPortada(),
+                  SizedBox(
+                    height: Adapt.hp(3),
+                  ),
+                  Nameuser(),
+                  SizedBox(
+                    height: Adapt.hp(2),
+                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child:
+                          Container(width: Adapt.wp(90), child: NameuserDes())),
+                  SizedBox(
+                    height: Adapt.hp(8),
+                  ),
+                  Itemsuser(),
+                  SizedBox(
+                    height: Adapt.hp(8),
+                  ),
+                  newPublication(),
+                  SizedBox(
+                    height: Adapt.hp(2),
+                  ),
+                  notificationsList(),
+                  SizedBox(
+                    height: Adapt.hp(5),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        barraPpal(),
+        Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
+      ],
     );
   }
 

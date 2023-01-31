@@ -87,6 +87,8 @@ flutter:
     - assets/iconos/candadoIcon.png
     - assets/iconos/camaraIcon.png
     - assets/iconos/galeriaIcon.png
+    - assets/iconos/menu.png
+    - assets/iconos/drawer/Notificacion.png
 
 
 

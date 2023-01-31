@@ -63,12 +63,18 @@ class _notificationHomeState extends State<notificationHome> {
                 height: size.height + 45,
                 child: Stack(
                   children: [
-                    botonVolver(context),
                     Column(
                       children: [
-                        notiIndividual(argus),
                         SizedBox(height: Adapt.hp(20)),
-                        listadoNotis(UserSimplePreferences.getPets() ?? []),
+                        (UserSimplePreferences.getPets() != [])
+                            ? listadoNotis(
+                                UserSimplePreferences.getPets() ?? [])
+                            : Container(
+                                color: Colors.red,
+                                height: Adapt.hp(20),
+                                width: Adapt.wp(10),
+                                child: Text("No tienes Notis"),
+                              ),
                       ],
                     )
                   ],
