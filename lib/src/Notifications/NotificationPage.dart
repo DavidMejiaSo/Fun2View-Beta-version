@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fun2view_appli/src/Preferencias/preferencias.dart';
 
 import '../../Responsive/Adapt.dart';
+import '../landing/alert_dialog.dart/alert_dialog.dart';
 import 'listadoNotis.dart';
 
 class notificationHome extends StatefulWidget {
@@ -15,6 +16,7 @@ class notificationHome extends StatefulWidget {
 }
 
 class _notificationHomeState extends State<notificationHome> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   //final notificacionService = notificationService();
 
   List<dynamic> tituloNotificacion = [];
@@ -42,7 +44,6 @@ class _notificationHomeState extends State<notificationHome> {
     List<String> descripcionNotificacion = [];
 
     @override
-    @override
     void initState() {
       descripcionNotificacion = UserSimplePreferences.getPets() ?? [];
 
@@ -52,37 +53,298 @@ class _notificationHomeState extends State<notificationHome> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: _key,
       resizeToAvoidBottomInset: true,
-      body: Form(
-        child: SingleChildScrollView(
-          child: SafeArea(
-              child: Column(
+      body: RefreshIndicator(
+        color: Color.fromARGB(255, 15, 208, 225),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        strokeWidth: 4.0,
+        onRefresh: () {
+          setState(() {});
+          Navigator.pushNamed(context, '/NotificationPage');
+          return Future<void>.delayed(const Duration(seconds: 3));
+        },
+        child: Form(
+          child: Stack(
             children: [
-              Container(
-                width: size.width,
-                height: size.height + 45,
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(height: Adapt.hp(20)),
-                        (UserSimplePreferences.getPets() != [])
-                            ? listadoNotis(
-                                UserSimplePreferences.getPets() ?? [])
-                            : Container(
-                                color: Colors.red,
-                                height: Adapt.hp(20),
-                                width: Adapt.wp(10),
-                                child: Text("No tienes Notis"),
-                              ),
-                      ],
-                    )
-                  ],
+              GestureDetector(
+                onDoubleTap: () {
+                  _key.currentState!.openDrawer();
+                },
+                child: SingleChildScrollView(
+                  child: SafeArea(
+                      child: Column(
+                    children: [
+                      Container(
+                        width: size.width,
+                        height: size.height + 45,
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                SizedBox(height: Adapt.hp(20)),
+                                (UserSimplePreferences.getPets() ?? []).isEmpty
+                                    ? Notisvacias()
+                                    : listadoNotis(
+                                        UserSimplePreferences.getPets() ?? [])
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
               ),
+              barraPpal()
             ],
-          )),
+          ),
         ),
+      ),
+      drawer: Drawer(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(70), bottomRight: Radius.circular(400)),
+        ),
+        elevation: 2.5,
+        child: ListView(
+          children: [
+            DrawerHeader(
+                child: Container(
+              width: double.infinity,
+              child: Column(children: [
+                CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                    radius: 30.5,
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                      radius: 27.5,
+                      child: Image.network(prefs.coverPhoto),
+                    )),
+                Text(prefs.usuario,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 15, 208, 225),
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400,
+                    )),
+                Text("@User",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 167, 167, 167),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    )),
+                SizedBox(
+                  height: Adapt.hp(2),
+                ),
+                Container(
+                  color: Colors.grey,
+                  height: Adapt.hp(0.2),
+                  width: double.infinity,
+                )
+              ]),
+            )),
+            ListTile(
+              leading: Container(
+                height: Adapt.hp(5),
+                width: Adapt.wp(5),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/iconos/home.png"),
+                  ),
+                ),
+              ),
+              title: Text(
+                'My Page',
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/pantallappal');
+              },
+            ),
+            ListTile(
+                leading: Container(
+                  height: Adapt.hp(5),
+                  width: Adapt.wp(5),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/iconos/birrete.png"),
+                    ),
+                  ),
+                ),
+                title: Text('Dashboard'),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialogCustom(
+                        bodyText: "Página en actualizacion**",
+                        bottonAcept: 'false',
+                        bottonCancel: Container(),
+                      );
+                    },
+                  );
+                  //Navigator.pushNamed(context, '/Dashboardpage');
+                }),
+            ListTile(
+              leading: Container(
+                height: Adapt.hp(5),
+                width: Adapt.wp(5),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/iconos/desconectar.png"),
+                  ),
+                ),
+              ),
+              title: Text('Payments'),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialogCustom(
+                      bodyText: "Página en constuccion**",
+                      bottonAcept: 'false',
+                      bottonCancel: Container(),
+                    );
+                  },
+                );
+              },
+            ),
+            ListTile(
+                leading: Container(
+                  height: Adapt.hp(5),
+                  width: Adapt.wp(5),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/iconos/hucha.png"),
+                    ),
+                  ),
+                ),
+                title: Text("Balance"),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialogCustom(
+                        bodyText: "Página en constuccion**",
+                        bottonAcept: 'false',
+                        bottonCancel: Container(),
+                      );
+                    },
+                  );
+                }),
+            ListTile(
+                leading: Container(
+                  height: Adapt.hp(5),
+                  width: Adapt.wp(5),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/iconos/wallet.png"),
+                    ),
+                  ),
+                ),
+                title: Text('Wallet'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/walletPage');
+                }),
+            ListTile(
+              leading: Container(
+                height: Adapt.hp(5),
+                width: Adapt.wp(5),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/iconos/sobre.png"),
+                  ),
+                ),
+              ),
+              title: Text('Notification', style: TextStyle(color: Colors.blue)),
+              onTap: () {
+                // showDialog(
+                //   context: context,
+                //   builder: (BuildContext context) {
+                //     return AlertDialogCustom(
+                //       bodyText: "Estamos Actualizando**",
+                //       bottonAcept: 'false',
+                //       bottonCancel: Container(),
+                //     );
+                //   },
+                // );
+                Navigator.pushNamed(context, '/NotificationPage');
+              },
+            ),
+            SizedBox(
+              height: Adapt.hp(2),
+            ),
+            Container(
+              color: Colors.grey,
+              height: Adapt.hp(0.2),
+              width: double.infinity,
+            ),
+            SizedBox(
+              height: Adapt.hp(5),
+            ),
+            ListTile(
+                leading: Container(
+                  height: Adapt.hp(5),
+                  width: Adapt.wp(5),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/iconos/cerrar-sesion.png"),
+                    ),
+                  ),
+                ),
+                title: Text('Logout'),
+                onTap: () {
+                  Navigator.restorablePushNamed(context, '/login');
+                  prefs.limpiar();
+                }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget barraPpal() {
+    return Container(
+      color: Colors.white,
+      height: Adapt.hp(11),
+      width: double.infinity,
+      child: Column(
+        children: [
+          SizedBox(
+            height: Adapt.hp(3),
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: Adapt.wp(3),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _key.currentState!.openDrawer();
+                  setState(() {});
+                },
+                child: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                  radius: 28.5,
+                  child: Container(
+                      height: Adapt.hp(10),
+                      width: Adapt.wp(10),
+                      child: Image.asset("assets/iconos/menu.png")),
+                ), //COntainer para evitar usar Scaffold
+              ),
+              SizedBox(
+                width: Adapt.wp(10),
+              ),
+              Container(
+                width: Adapt.wp(50),
+                child: Image(image: AssetImage("assets/fun2vie.png")),
+              ),
+              SizedBox(
+                width: Adapt.wp(5),
+              ),
+              //COntainer para evitar usar Scaffold
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -219,6 +481,38 @@ class _notificationHomeState extends State<notificationHome> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget Notisvacias() {
+    return Center(
+      child: Container(
+        height: Adapt.hp(50),
+        width: Adapt.wp(80),
+        child: Center(
+            child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/fun2vie.png"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              width: Adapt.wp(60),
+              height: Adapt.hp(8),
+            ),
+            Text("You don't have notifications yet..:(",
+                style: TextStyle(
+                  textBaseline: TextBaseline.ideographic,
+                  color: Color.fromARGB(255, 15, 208, 225),
+                  fontSize: 36,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                )),
+          ],
+        )),
       ),
     );
   }

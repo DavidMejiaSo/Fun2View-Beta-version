@@ -45,6 +45,7 @@ dependencies:
   http: ^0.13.5
   flutter_html: ^0.11.1
   image_picker: ^0.8.6
+  url_launcher: ^6.1.8
   
 
 dev_dependencies:
@@ -89,6 +90,8 @@ flutter:
     - assets/iconos/galeriaIcon.png
     - assets/iconos/menu.png
     - assets/iconos/drawer/Notificacion.png
+    - assets/iconos/drawer/Bluecamara.png
+    - assets/iconos/drawer/blueGallery.png
 
 
 

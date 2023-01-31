@@ -368,7 +368,37 @@ class _Pageppal extends State<Pageppal> {
           )),
       height: Adapt.hp(30),
       width: Adapt.wp(50),
-      child: listadoNotis(UserSimplePreferences.getPets() ?? []),
+      child: (UserSimplePreferences.getPets() ?? []).isNotEmpty
+          ? listadoNotis(UserSimplePreferences.getPets() ?? [])
+          : Center(
+              child: Container(
+                height: Adapt.hp(30),
+                width: Adapt.wp(30),
+                child: Center(
+                    child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/fun2vie.png"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      width: Adapt.wp(40),
+                      height: Adapt.hp(8),
+                    ),
+                    Text("You don't have notifications yet..:(",
+                        style: TextStyle(
+                          textBaseline: TextBaseline.ideographic,
+                          color: Color.fromARGB(255, 15, 208, 225),
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w700,
+                        )),
+                  ],
+                )),
+              ),
+            ),
     );
   }
 
@@ -412,7 +442,11 @@ class _Pageppal extends State<Pageppal> {
               ),
               GestureDetector(
                 onTap: () {
-                  notis = true;
+                  if (notis == true) {
+                    notis = false;
+                  } else {
+                    notis = true;
+                  }
                   setState(() {});
                 },
                 child: CircleAvatar(
@@ -439,6 +473,8 @@ class _Pageppal extends State<Pageppal> {
           child: GestureDetector(
             onDoubleTap: () {
               _key.currentState!.openDrawer();
+              notis = false;
+              setState(() {});
             },
             child: Container(
               color: Color.fromARGB(255, 255, 255, 255),
@@ -462,10 +498,10 @@ class _Pageppal extends State<Pageppal> {
                   SizedBox(
                     height: Adapt.hp(8),
                   ),
-                  Itemsuser(),
-                  SizedBox(
-                    height: Adapt.hp(8),
-                  ),
+                  //Itemsuser(),
+                  //SizedBox(
+                  //  height: Adapt.hp(8),
+                  //),
                   newPublication(),
                   SizedBox(
                     height: Adapt.hp(2),
@@ -480,7 +516,9 @@ class _Pageppal extends State<Pageppal> {
           ),
         ),
         barraPpal(),
-        Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
+        (notis == true)
+            ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
+            : Container()
       ],
     );
   }
@@ -893,7 +931,7 @@ class _Pageppal extends State<Pageppal> {
                                       Column(
                                         children: [
                                           SizedBox(
-                                            height: Adapt.hp(45),
+                                            height: Adapt.hp(35),
                                           ),
                                           GestureDetector(
                                             onTap: () async {
@@ -920,20 +958,12 @@ class _Pageppal extends State<Pageppal> {
 
                                               setState(() {});
                                             },
-                                            child: CircleAvatar(
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 247, 247, 247),
-                                              radius: 28.5,
-                                              child: Container(
-                                                height: Adapt.hp(8),
-                                                width: Adapt.wp(8),
-                                                child: Image.asset(
-                                                    "assets/iconos/galeriaIcon.png"),
-                                              ),
+                                            child: Container(
+                                              height: Adapt.hp(15),
+                                              width: Adapt.wp(15),
+                                              child: Image.asset(
+                                                  "assets/iconos/drawer/blueGallery.png"),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: Adapt.hp(5),
                                           ),
                                           GestureDetector(
                                             onTap: () async {
@@ -960,16 +990,11 @@ class _Pageppal extends State<Pageppal> {
                                               _imageSend = base64.encode(bytes);
                                               Navigator.of(context).pop();
                                             },
-                                            child: CircleAvatar(
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 247, 247, 247),
-                                              radius: 28.5,
-                                              child: Container(
-                                                height: Adapt.hp(8),
-                                                width: Adapt.wp(8),
-                                                child: Image.asset(
-                                                    "assets/iconos/camaraIcon.png"),
-                                              ),
+                                            child: Container(
+                                              height: Adapt.hp(15),
+                                              width: Adapt.wp(15),
+                                              child: Image.asset(
+                                                  "assets/iconos/drawer/Bluecamara.png"),
                                             ),
                                           )
                                         ],
@@ -1006,11 +1031,12 @@ class _Pageppal extends State<Pageppal> {
                         );
                       },
                       child: Container(
-                        height: Adapt.hp(7),
-                        width: Adapt.wp(7),
+                        height: Adapt.hp(10),
+                        width: Adapt.wp(10),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage("assets/iconos/galeriaIcon.png"),
+                            image: AssetImage(
+                                "assets/iconos/drawer/blueGallery.png"),
                           ),
                         ),
                       ),

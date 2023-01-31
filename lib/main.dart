@@ -52,6 +52,7 @@ class _MyAppState extends State<MyApp> {
       await UserSimplePreferences.setPets(notisListado.notis);
       print("Aqui es mi rey");
       print(UserSimplePreferences.getPets() ?? []);
+      setState(() {});
     });
     super.initState();
   }
