@@ -9,6 +9,7 @@ import 'package:fun2view_appli/src/controller/posts_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../Notifications/listadoNotis.dart';
 import '../Preferencias/preferencias.dart';
@@ -360,7 +361,7 @@ class _Pageppal extends State<Pageppal> {
   Widget NotisLista() {
     return Container(
       decoration: BoxDecoration(
-          color: Color.fromARGB(255, 255, 255, 255),
+          color: Color.fromARGB(255, 226, 246, 255),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
             bottomRight: Radius.circular(30),
@@ -384,8 +385,8 @@ class _Pageppal extends State<Pageppal> {
                           fit: BoxFit.fill,
                         ),
                       ),
-                      width: Adapt.wp(40),
-                      height: Adapt.hp(8),
+                      width: Adapt.wp(30),
+                      height: Adapt.hp(10),
                     ),
                     Text("You don't have notifications yet..:(",
                         style: TextStyle(
@@ -518,7 +519,8 @@ class _Pageppal extends State<Pageppal> {
         barraPpal(),
         (notis == true)
             ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
-            : Container()
+            : Container(),
+        Align(alignment: Alignment.bottomRight, child: BottomPpal())
       ],
     );
   }
@@ -630,7 +632,7 @@ class _Pageppal extends State<Pageppal> {
                                           0)
                                       ? Container(
                                           height: Adapt.hp(20),
-                                          width: double.infinity,
+                                          width: Adapt.wp(90),
                                           child: Stack(
                                             children: [
                                               Center(
@@ -639,7 +641,7 @@ class _Pageppal extends State<Pageppal> {
                                               Container(
                                                   decoration: BoxDecoration(
                                                       image: DecorationImage(
-                                                          fit: BoxFit.cover,
+                                                          fit: BoxFit.contain,
                                                           image: NetworkImage(
                                                               snapshot.data["posts"]
                                                                           [
@@ -654,10 +656,21 @@ class _Pageppal extends State<Pageppal> {
                                 ],
                               ),
                             ),
+                            SizedBox(
+                              height: Adapt.hp(1),
+                            ),
                             Column(
                               children: [
                                 Row(
-                                  children: [],
+                                  children: [
+                                    SizedBox(
+                                      width: Adapt.wp(4),
+                                    ),
+                                    Text("♥")
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: Adapt.hp(0.5),
                                 ),
                                 Row(
                                   children: [
@@ -781,6 +794,117 @@ class _Pageppal extends State<Pageppal> {
         ));
   }
 
+  Widget BottomPpal() {
+    return GestureDetector(
+      onTap: () async {
+        setState(() {});
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  setState(() {});
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Column(
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: Adapt.hp(35),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                final picker = new ImagePicker();
+                                final PickedFile? pickedFile =
+                                    await picker.getImage(
+                                        source: ImageSource.gallery,
+                                        imageQuality: 100);
+
+                                if (pickedFile == null) {
+                                  setState(() {});
+                                  return;
+                                }
+                                setState(() {});
+
+                                pathImage = pickedFile.path;
+                                List<int> bytes =
+                                    await new File(pathImage).readAsBytesSync();
+
+                                _imageSend = base64.encode(bytes);
+                                Navigator.of(context).pop();
+
+                                setState(() {});
+                              },
+                              child: Container(
+                                height: Adapt.hp(15),
+                                width: Adapt.wp(15),
+                                child: Image.asset(
+                                    "assets/iconos/drawer/blueGallery.png"),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                final picker = new ImagePicker();
+                                final PickedFile? pickedFile =
+                                    await picker.getImage(
+                                        source: ImageSource.camera,
+                                        imageQuality: 100);
+
+                                if (pickedFile == null) {
+                                  setState(() {});
+
+                                  return;
+                                }
+                                setState(() {});
+                                print("Aqui tenemos esto ${pickedFile.path}");
+                                pathImage = pickedFile.path;
+                                List<int> bytes =
+                                    await new File(pathImage).readAsBytesSync();
+
+                                _imageSend = base64.encode(bytes);
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                height: Adapt.hp(15),
+                                width: Adapt.wp(15),
+                                child: Image.asset(
+                                    "assets/iconos/drawer/Bluecamara.png"),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: Adapt.hp(5)),
+                        SizedBox(height: Adapt.hp(5)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: CircleAvatar(
+        backgroundColor: Color.fromARGB(255, 15, 208, 225),
+        radius: 38.5,
+        child: Text("+",
+            style: TextStyle(
+              fontSize: 46,
+              fontStyle: FontStyle.normal,
+              //fontWeight: FontWeight.w700,
+              color: Color.fromARGB(255, 255, 255, 255),
+            )),
+      ),
+    );
+  }
+
   Widget Cerrar() {
     return GestureDetector(
       onTap: () {
@@ -824,14 +948,41 @@ class _Pageppal extends State<Pageppal> {
 //}
 
   Widget Nameuser() {
-    return Text(prefs.usuario,
-        style: TextStyle(
-          textBaseline: TextBaseline.ideographic,
-          color: Color.fromARGB(255, 15, 208, 225),
-          fontSize: 46,
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.w700,
-        ));
+    return Row(
+      children: [
+        SizedBox(
+          width: Adapt.wp(19),
+        ),
+        Text(prefs.usuario,
+            style: TextStyle(
+              textBaseline: TextBaseline.ideographic,
+              color: Color.fromARGB(255, 15, 208, 225),
+              fontSize: 46,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w700,
+            )),
+        SizedBox(
+          width: Adapt.wp(2),
+        ),
+        GestureDetector(
+          //https://design2.fun2view.com/${prefs.nombreUsuario}
+          onTap: () async {
+            print("si funciona gay");
+            await Share.share(
+                "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
+          },
+          child: Container(
+            height: Adapt.hp(10),
+            width: Adapt.wp(5),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/share.png"),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget NameuserDes() {
@@ -868,7 +1019,8 @@ class _Pageppal extends State<Pageppal> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                            color: Color.fromARGB(255, 65, 65, 66), width: 0.5),
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            width: 0.5),
                       ),
                       height: Adapt.hp(12),
                       width: Adapt.wp(70),
@@ -879,6 +1031,7 @@ class _Pageppal extends State<Pageppal> {
                               fontSize: Adapt.px(24),
                               color: Color.fromARGB(255, 48, 49, 49)),
                           maxLines: 3,
+                          maxLength: 85,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "New post...",
@@ -912,137 +1065,7 @@ class _Pageppal extends State<Pageppal> {
                 Row(
                   children: [
                     SizedBox(
-                      width: Adapt.wp(48),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        setState(() {});
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                color: Colors.transparent,
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Column(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          SizedBox(
-                                            height: Adapt.hp(35),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              final picker = new ImagePicker();
-                                              final PickedFile? pickedFile =
-                                                  await picker.getImage(
-                                                      source:
-                                                          ImageSource.gallery,
-                                                      imageQuality: 100);
-
-                                              if (pickedFile == null) {
-                                                setState(() {});
-                                                return;
-                                              }
-                                              setState(() {});
-
-                                              pathImage = pickedFile.path;
-                                              List<int> bytes =
-                                                  await new File(pathImage)
-                                                      .readAsBytesSync();
-
-                                              _imageSend = base64.encode(bytes);
-                                              Navigator.of(context).pop();
-
-                                              setState(() {});
-                                            },
-                                            child: Container(
-                                              height: Adapt.hp(15),
-                                              width: Adapt.wp(15),
-                                              child: Image.asset(
-                                                  "assets/iconos/drawer/blueGallery.png"),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              final picker = new ImagePicker();
-                                              final PickedFile? pickedFile =
-                                                  await picker.getImage(
-                                                      source:
-                                                          ImageSource.camera,
-                                                      imageQuality: 100);
-
-                                              if (pickedFile == null) {
-                                                setState(() {});
-
-                                                return;
-                                              }
-                                              setState(() {});
-                                              print(
-                                                  "Aqui tenemos esto ${pickedFile.path}");
-                                              pathImage = pickedFile.path;
-                                              List<int> bytes =
-                                                  await new File(pathImage)
-                                                      .readAsBytesSync();
-
-                                              _imageSend = base64.encode(bytes);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              height: Adapt.hp(15),
-                                              width: Adapt.wp(15),
-                                              child: Image.asset(
-                                                  "assets/iconos/drawer/Bluecamara.png"),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: Adapt.hp(5)),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                          setState(() {});
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              Color.fromARGB(255, 93, 181, 248),
-                                          radius: 20.5,
-                                          child: Center(
-                                            child: Text(
-                                              "X",
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color.fromARGB(
-                                                      255, 255, 255, 255)),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: Adapt.hp(5)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        height: Adapt.hp(10),
-                        width: Adapt.wp(10),
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                                "assets/iconos/drawer/blueGallery.png"),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: Adapt.wp(6),
+                      width: Adapt.wp(60),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -1076,9 +1099,12 @@ class _Pageppal extends State<Pageppal> {
                       ),
                     ),
                     SizedBox(
-                      width: Adapt.wp(5),
+                      width: Adapt.wp(6),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: Adapt.hp(2),
                 ),
               ],
             )
@@ -1164,11 +1190,15 @@ class _Pageppal extends State<Pageppal> {
           alignment: Alignment.center,
           child: Stack(
             children: [
-              Center(child: CircularProgressIndicator()),
-              Container(
-                  height: Adapt.hp(30),
-                  width: Adapt.wp(40),
-                  child: Image.file(File(Picture), fit: BoxFit.cover)),
+              Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator()),
+              Center(
+                child: Container(
+                    height: Adapt.hp(30),
+                    width: Adapt.wp(40),
+                    child: Image.file(File(Picture), fit: BoxFit.cover)),
+              ),
             ],
           ),
         ),

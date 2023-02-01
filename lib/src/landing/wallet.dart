@@ -556,14 +556,7 @@ class _walletPageState extends State<walletPage> {
           height: Adapt.hp(3),
         ),
         GestureDetector(
-          onLongPress: () async {
-            const url = 'https://fun2view.com/';
-            if (await canLaunch(url)) {
-              await launch(url);
-            } else {
-              throw 'Could not launch $url';
-            }
-          },
+          onLongPress: () async {},
           child: Text("https://design2.fun2view.com/",
               style: TextStyle(
                 color: Color.fromARGB(255, 9, 92, 193),

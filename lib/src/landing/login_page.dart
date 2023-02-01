@@ -465,7 +465,6 @@ class LoginServiceL extends ChangeNotifier {
     //prefs.email = respuesta['3']['email'];
     //prefs.nombreUsuario = respuesta['1']['username'];
     if (respuesta.containsKey("auth_token")) {
-      print("Esto trae el Login $respuesta");
       prefs.usuario = respuesta['name'];
       prefs.email = respuesta['email'];
       prefs.token = respuesta['auth_token'];
@@ -473,6 +472,7 @@ class LoginServiceL extends ChangeNotifier {
       prefs.portadaPhoto = respuesta['cover'];
       prefs.descripcion = respuesta['story'];
       prefs.balance = respuesta['balance'];
+      prefs.nombreUsuario = respuesta['username'];
 
       return null;
     } else {
