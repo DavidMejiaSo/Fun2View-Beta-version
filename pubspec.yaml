@@ -83,7 +83,7 @@ flutter:
     - assets/iconos/descargar.png
     - assets/iconos/cerrar-sesion.png
     - assets/iconos/desconectar.png
-    - assets/iconos/hucha.png
+
     - assets/iconos/wallet.png
     - assets/iconos/sobre.png
     - assets/iconos/personIcon.png
@@ -95,6 +95,17 @@ flutter:
     - assets/iconos/drawer/Bluecamara.png
     - assets/iconos/drawer/blueGallery.png
     - assets/iconos/share.png
+    - assets/iconos/Trailingicon.png
+    - assets/iconos/Alerta.png
+    - assets/eye.png
+    - assets/ojo.png
+    - assets/flechaback.png
+    - assets/iconos/drawer/posts.png
+    - assets/iconos/ojo.png
+    - assets/iconos/Homep.png
+
+    - assets/iconos/walletIcon.png
+    - assets/iconos/notificacionIcon.png
 
 
 

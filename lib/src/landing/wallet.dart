@@ -101,77 +101,6 @@ class _walletPageState extends State<walletPage> {
                     width: Adapt.wp(5),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/iconos/birrete.png"),
-                      ),
-                    ),
-                  ),
-                  title: Text('Dashboard'),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialogCustom(
-                          bodyText: "Página en actualizacion**",
-                          bottonAcept: 'false',
-                          bottonCancel: Container(),
-                        );
-                      },
-                    );
-                    //Navigator.pushNamed(context, '/Dashboardpage');
-                  }),
-              ListTile(
-                leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/desconectar.png"),
-                    ),
-                  ),
-                ),
-                title: Text('Payments'),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialogCustom(
-                        bodyText: "Página en constuccion**",
-                        bottonAcept: 'false',
-                        bottonCancel: Container(),
-                      );
-                    },
-                  );
-                },
-              ),
-              ListTile(
-                  leading: Container(
-                    height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/hucha.png"),
-                      ),
-                    ),
-                  ),
-                  title: Text("Balance"),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialogCustom(
-                          bodyText: "Página en constuccion**",
-                          bottonAcept: 'false',
-                          bottonCancel: Container(),
-                        );
-                      },
-                    );
-                  }),
-              ListTile(
-                  leading: Container(
-                    height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
                         image: AssetImage("assets/iconos/wallet.png"),
                       ),
                     ),
@@ -339,61 +268,72 @@ class _walletPageState extends State<walletPage> {
   Widget barraPpal() {
     return Container(
       color: Colors.white,
-      height: Adapt.hp(11),
+      height: Adapt.hp(10),
       width: double.infinity,
       child: Column(
         children: [
           SizedBox(
-            height: Adapt.hp(3),
+            height: Adapt.hp(4),
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: Adapt.wp(3),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _key.currentState!.openDrawer();
-                },
-                child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                  radius: 28.5,
-                  child: Container(
-                      height: Adapt.hp(10),
-                      width: Adapt.wp(10),
-                      child: Image.asset("assets/iconos/menu.png")),
-                ), //COntainer para evitar usar Scaffold
-              ),
-              SizedBox(
-                width: Adapt.wp(10),
-              ),
-              Container(
-                width: Adapt.wp(50),
-                child: Image(image: AssetImage("assets/fun2vie.png")),
-              ),
-              SizedBox(
-                width: Adapt.wp(5),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (notis == true) {
-                    notis = false;
-                  } else {
-                    notis = true;
-                  }
-                  setState(() {});
-                },
-                child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                  radius: 28.5,
-                  child: Container(
-                      height: Adapt.hp(7),
-                      width: Adapt.wp(7),
-                      child:
-                          Image.asset("assets/iconos/drawer/Notificacion.png")),
+          Center(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: Adapt.wp(6),
                 ),
-              ), //COntainer para evitar usar Scaffold
-            ],
+                GestureDetector(
+                  onTap: () {
+                    _key.currentState!.openDrawer();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    radius: 15.5,
+                    child: Container(
+                        // color: Colors.red,
+                        height: Adapt.hp(10),
+                        width: Adapt.wp(10),
+                        child: Image.asset("assets/iconos/menu.png")),
+                  ), //COntainer para evitar usar Scaffold
+                ),
+                SizedBox(
+                  width: Adapt.wp(10),
+                ),
+                Container(
+                  height: Adapt.hp(6),
+                  width: Adapt.wp(50),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/fun2vie.png"),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: Adapt.wp(9),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (notis == true) {
+                        notis = false;
+                      } else {
+                        notis = true;
+                      }
+                      setState(() {});
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      radius: 18.5,
+                      child: Container(
+                          height: Adapt.hp(6),
+                          width: Adapt.wp(6),
+                          child: Image.asset(
+                              "assets/iconos/drawer/Notificacion.png")),
+                    ),
+                  ),
+                ), //COntainer para evitar usar Scaffold
+              ],
+            ),
           ),
         ],
       ),
@@ -447,6 +387,7 @@ class _walletPageState extends State<walletPage> {
 
   Widget tittleWallet() {
     return Container(
+      color: Color.fromARGB(255, 104, 183, 247),
       child: Row(
         children: [
           Container(
@@ -454,7 +395,7 @@ class _walletPageState extends State<walletPage> {
             width: Adapt.wp(8),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/iconos/wallet.png"),
+                image: AssetImage("assets/flechaback.png"),
               ),
             ),
           ),
@@ -465,7 +406,7 @@ class _walletPageState extends State<walletPage> {
               style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 0, 0, 0))),
+                  color: Color.fromARGB(255, 255, 255, 255))),
           SizedBox(
             width: Adapt.wp(5),
           ),
@@ -477,14 +418,7 @@ class _walletPageState extends State<walletPage> {
   Widget balanceContainer() {
     return Column(
       children: [
-        Row(
-          children: [
-            SizedBox(
-              width: Adapt.wp(13),
-            ),
-            tittleWallet(),
-          ],
-        ),
+        tittleWallet(),
         SizedBox(
           height: Adapt.hp(8),
         ),

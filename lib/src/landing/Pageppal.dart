@@ -131,11 +131,11 @@ class _Pageppal extends State<Pageppal> {
               )),
               ListTile(
                 leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
+                  height: Adapt.hp(8),
+                  width: Adapt.wp(8),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/iconos/home.png"),
+                      image: AssetImage("assets/iconos/Homep.png"),
                     ),
                   ),
                 ),
@@ -153,78 +153,7 @@ class _Pageppal extends State<Pageppal> {
                     width: Adapt.wp(5),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/iconos/birrete.png"),
-                      ),
-                    ),
-                  ),
-                  title: Text('Dashboard'),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialogCustom(
-                          bodyText: "Página en actualizacion**",
-                          bottonAcept: 'false',
-                          bottonCancel: Container(),
-                        );
-                      },
-                    );
-                    //Navigator.pushNamed(context, '/Dashboardpage');
-                  }),
-              ListTile(
-                leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/desconectar.png"),
-                    ),
-                  ),
-                ),
-                title: Text('Payments'),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialogCustom(
-                        bodyText: "Página en constuccion**",
-                        bottonAcept: 'false',
-                        bottonCancel: Container(),
-                      );
-                    },
-                  );
-                },
-              ),
-              ListTile(
-                  leading: Container(
-                    height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/hucha.png"),
-                      ),
-                    ),
-                  ),
-                  title: Text("Balance"),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialogCustom(
-                          bodyText: "Página en constuccion**",
-                          bottonAcept: 'false',
-                          bottonCancel: Container(),
-                        );
-                      },
-                    );
-                  }),
-              ListTile(
-                  leading: Container(
-                    height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/wallet.png"),
+                        image: AssetImage("assets/iconos/walletIcon.png"),
                       ),
                     ),
                   ),
@@ -238,7 +167,7 @@ class _Pageppal extends State<Pageppal> {
                   width: Adapt.wp(5),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/iconos/sobre.png"),
+                      image: AssetImage("assets/iconos/notificacionIcon.png"),
                     ),
                   ),
                 ),
@@ -406,61 +335,72 @@ class _Pageppal extends State<Pageppal> {
   Widget barraPpal() {
     return Container(
       color: Colors.white,
-      height: Adapt.hp(11),
+      height: Adapt.hp(10),
       width: double.infinity,
       child: Column(
         children: [
           SizedBox(
-            height: Adapt.hp(3),
+            height: Adapt.hp(4),
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: Adapt.wp(3),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _key.currentState!.openDrawer();
-                },
-                child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                  radius: 28.5,
-                  child: Container(
-                      height: Adapt.hp(10),
-                      width: Adapt.wp(10),
-                      child: Image.asset("assets/iconos/menu.png")),
-                ), //COntainer para evitar usar Scaffold
-              ),
-              SizedBox(
-                width: Adapt.wp(10),
-              ),
-              Container(
-                width: Adapt.wp(50),
-                child: Image(image: AssetImage("assets/fun2vie.png")),
-              ),
-              SizedBox(
-                width: Adapt.wp(5),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (notis == true) {
-                    notis = false;
-                  } else {
-                    notis = true;
-                  }
-                  setState(() {});
-                },
-                child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                  radius: 28.5,
-                  child: Container(
-                      height: Adapt.hp(7),
-                      width: Adapt.wp(7),
-                      child:
-                          Image.asset("assets/iconos/drawer/Notificacion.png")),
+          Center(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: Adapt.wp(6),
                 ),
-              ), //COntainer para evitar usar Scaffold
-            ],
+                GestureDetector(
+                  onTap: () {
+                    _key.currentState!.openDrawer();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    radius: 15.5,
+                    child: Container(
+                        // color: Colors.red,
+                        height: Adapt.hp(10),
+                        width: Adapt.wp(10),
+                        child: Image.asset("assets/iconos/menu.png")),
+                  ), //COntainer para evitar usar Scaffold
+                ),
+                SizedBox(
+                  width: Adapt.wp(10),
+                ),
+                Container(
+                  height: Adapt.hp(6),
+                  width: Adapt.wp(50),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/fun2vie.png"),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: Adapt.wp(9),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (notis == true) {
+                        notis = false;
+                      } else {
+                        notis = true;
+                      }
+                      setState(() {});
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      radius: 18.5,
+                      child: Container(
+                          height: Adapt.hp(6),
+                          width: Adapt.wp(6),
+                          child: Image.asset(
+                              "assets/iconos/drawer/Notificacion.png")),
+                    ),
+                  ),
+                ), //COntainer para evitar usar Scaffold
+              ],
+            ),
           ),
         ],
       ),
@@ -495,19 +435,26 @@ class _Pageppal extends State<Pageppal> {
                   Align(
                       alignment: Alignment.center,
                       child:
-                          Container(width: Adapt.wp(90), child: NameuserDes())),
+                          Container(width: Adapt.wp(70), child: NameuserDes())),
                   SizedBox(
                     height: Adapt.hp(8),
                   ),
-                  //Itemsuser(),
-                  //SizedBox(
-                  //  height: Adapt.hp(8),
-                  //),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: Adapt.wp(10),
+                      ),
+                      userInfo(),
+                    ],
+                  ),
+                  SizedBox(
+                    height: Adapt.hp(8),
+                  ),
                   newPublication(),
                   SizedBox(
                     height: Adapt.hp(2),
                   ),
-                  notificationsList(),
+                  posts_List(),
                   SizedBox(
                     height: Adapt.hp(5),
                   ),
@@ -538,7 +485,69 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
-  Widget notificationsList() {
+  Widget userInfo() {
+    return FutureBuilder(
+        future: Myposts_service().myLikes(prefs.token),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: Adapt.wp(15),
+                      ),
+                      Text(snapshot.data["posts"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      SizedBox(
+                        width: Adapt.wp(2),
+                      ),
+                      Text("Post")
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Column(
+                    children: [
+                      Text(snapshot.data["photos"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      Text("Photos")
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Column(
+                    children: [
+                      Text(snapshot.data["likes"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      Text("Likes")
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Column(
+                    children: [
+                      Text(snapshot.data["video"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      Text("video")
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                ],
+              ),
+            );
+          } else
+            return Container(child: Center(child: CircularProgressIndicator()));
+        });
+  }
+
+  Widget posts_List() {
     //Notificaciones principales
     return FutureBuilder(
         future: Myposts_service().myPost(prefs.token),
@@ -547,7 +556,7 @@ class _Pageppal extends State<Pageppal> {
             return SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Container(
-                width: Adapt.wp(95),
+                width: Adapt.wp(85),
                 height: Adapt.hp(35),
                 child: ListView.builder(
                   itemCount: snapshot.data["posts"].length,
@@ -571,7 +580,7 @@ class _Pageppal extends State<Pageppal> {
                                 ),
                                 AvataruserII(),
                                 SizedBox(
-                                  width: Adapt.wp(1),
+                                  width: Adapt.wp(4),
                                 ),
                                 Column(
                                   children: [
@@ -579,7 +588,7 @@ class _Pageppal extends State<Pageppal> {
                                         style: TextStyle(
                                           color: Color.fromARGB(
                                               255, 103, 103, 103),
-                                          fontSize: 18,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                         )),
                                     Text(
@@ -589,7 +598,7 @@ class _Pageppal extends State<Pageppal> {
                                         style: TextStyle(
                                           color: Color.fromARGB(
                                               255, 136, 134, 134),
-                                          fontSize: 10,
+                                          fontSize: 6,
                                           fontWeight: FontWeight.bold,
                                         )),
                                   ],
@@ -597,7 +606,7 @@ class _Pageppal extends State<Pageppal> {
                               ],
                             ),
                             SizedBox(
-                              width: Adapt.wp(2),
+                              width: Adapt.wp(4),
                             ),
                             Container(
                               decoration: BoxDecoration(
@@ -607,10 +616,13 @@ class _Pageppal extends State<Pageppal> {
                               // width: Adapt.wp(95),
                               child: Column(
                                 children: [
+                                  SizedBox(
+                                    height: Adapt.hp(2),
+                                  ),
                                   Row(
                                     children: [
                                       SizedBox(
-                                        width: Adapt.wp(3),
+                                        width: Adapt.wp(2),
                                       ),
                                       Align(
                                         alignment: Alignment.centerLeft,
@@ -621,7 +633,7 @@ class _Pageppal extends State<Pageppal> {
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 97, 97, 97),
-                                              fontSize: 18,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.w500,
                                             )),
                                       ),
@@ -664,9 +676,13 @@ class _Pageppal extends State<Pageppal> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width: Adapt.wp(4),
+                                      width: Adapt.wp(5),
                                     ),
-                                    Text("♥")
+                                    Text("♥",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ))
                                   ],
                                 ),
                                 SizedBox(
@@ -679,18 +695,25 @@ class _Pageppal extends State<Pageppal> {
                                     ),
                                     Row(
                                       children: [
+                                        SizedBox(
+                                          width: Adapt.wp(2),
+                                        ),
                                         Text(
                                             snapshot.data["posts"][index]
                                                     ["likes"]
                                                 .toString(),
                                             style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 10,
                                               fontWeight: FontWeight.bold,
                                             )),
                                         SizedBox(
                                           width: Adapt.wp(2),
                                         ),
-                                        Text("Likes")
+                                        Text("Likes",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            )),
                                       ],
                                     ),
                                   ],
@@ -733,23 +756,6 @@ class _Pageppal extends State<Pageppal> {
     setState(() {});
   }
 
-  void traerPhotos() {
-    String links = "";
-    for (int i = 0; i < mediaImagen.length; i++) {
-      for (Map image in mediaImagen[i]) {
-        if (image["image"] == "") {
-          Imagenes.add(links);
-        } else {
-          links = image["image"];
-          Imagenes.add(links);
-        }
-      }
-
-      setState(() {});
-    }
-    print("Estos son $Imagenes");
-  }
-
   Widget Portadauser() {
     return Container(
       decoration: BoxDecoration(
@@ -765,9 +771,9 @@ class _Pageppal extends State<Pageppal> {
 
   Widget Avataruser() {
     return CircleAvatar(
-        radius: 90.5,
+        radius: 60.5,
         child: CircleAvatar(
-          radius: 87.5,
+          radius: 57.5,
           child: Image.network(prefs.coverPhoto),
         ));
   }
@@ -951,13 +957,13 @@ class _Pageppal extends State<Pageppal> {
     return Row(
       children: [
         SizedBox(
-          width: Adapt.wp(19),
+          width: Adapt.wp(25),
         ),
         Text(prefs.usuario,
             style: TextStyle(
               textBaseline: TextBaseline.ideographic,
               color: Color.fromARGB(255, 15, 208, 225),
-              fontSize: 46,
+              fontSize: 36,
               fontStyle: FontStyle.normal,
               fontWeight: FontWeight.w700,
             )),
@@ -965,9 +971,7 @@ class _Pageppal extends State<Pageppal> {
           width: Adapt.wp(2),
         ),
         GestureDetector(
-          //https://design2.fun2view.com/${prefs.nombreUsuario}
           onTap: () async {
-            print("si funciona gay");
             await Share.share(
                 "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
           },
@@ -988,7 +992,8 @@ class _Pageppal extends State<Pageppal> {
   Widget NameuserDes() {
     return Text(prefs.descripcion,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 15,
+          color: Colors.grey,
           fontWeight: FontWeight.bold,
         ));
   }
@@ -1004,7 +1009,7 @@ class _Pageppal extends State<Pageppal> {
               bottomRight: Radius.circular(40))),
       elevation: 10.2,
       child: Container(
-        width: Adapt.wp(95),
+        width: Adapt.wp(87),
         child: Column(
           children: [
             Row(
@@ -1023,7 +1028,7 @@ class _Pageppal extends State<Pageppal> {
                             width: 0.5),
                       ),
                       height: Adapt.hp(12),
-                      width: Adapt.wp(70),
+                      width: Adapt.wp(60),
                       child: Center(
                         child: TextField(
                           keyboardType: TextInputType.text,
@@ -1085,12 +1090,12 @@ class _Pageppal extends State<Pageppal> {
                                 bottomRight: Radius.circular(14))),
                         child: Container(
                           height: Adapt.hp(4),
-                          width: Adapt.wp(22),
+                          width: Adapt.wp(18),
                           child: Center(
                             child: Text(
                               "Publish",
                               style: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(255, 255, 255, 255)),
                             ),
@@ -1099,12 +1104,12 @@ class _Pageppal extends State<Pageppal> {
                       ),
                     ),
                     SizedBox(
-                      width: Adapt.wp(6),
+                      width: Adapt.wp(4),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: Adapt.hp(2),
+                  height: Adapt.hp(1),
                 ),
               ],
             )
@@ -1120,63 +1125,6 @@ class _Pageppal extends State<Pageppal> {
         await Myposts_service().Post(prefs.token, comentario, _imageSend);
     // print(respuestas);
     setState(() {});
-  }
-
-  Widget Itemsuser() {
-    return Row(
-      children: [
-        Column(
-          children: [
-            SizedBox(
-              width: Adapt.wp(15),
-            ),
-            //Icon(Icons.heart_broken),
-            SizedBox(height: Adapt.hp(2)),
-            Text("Post")
-          ],
-        ),
-        SizedBox(
-          width: Adapt.wp(10),
-        ),
-        Column(
-          children: [
-            //Icon(Icons.heart_broken),
-            SizedBox(height: Adapt.hp(2)),
-            Text("Photos")
-          ],
-        ),
-        SizedBox(
-          width: Adapt.wp(10),
-        ),
-        Column(
-          children: [
-            //Icon(Icons.heart_broken),
-            SizedBox(height: Adapt.hp(2)),
-            Text("Videos")
-          ],
-        ),
-        SizedBox(
-          width: Adapt.wp(10),
-        ),
-        Column(
-          children: [
-            //Icon(Icons.heart_broken),
-            SizedBox(height: Adapt.hp(2)),
-            Text("Audio")
-          ],
-        ),
-        SizedBox(
-          width: Adapt.wp(10),
-        ),
-        Column(
-          children: [
-            //Icon(Icons.heart_broken),
-            SizedBox(height: Adapt.hp(2)),
-            Text("Shop")
-          ],
-        ),
-      ],
-    );
   }
 
   Widget mostrarImagen(String Picture) {
@@ -1267,6 +1215,31 @@ class Myposts_service {
 
     dynamic respuesta = json.decode(res.body);
     print(data);
+  }
+
+  Future<dynamic> myLikes(
+    String token,
+  ) async {
+    String url = 'https://design2.fun2view.com/mobile/v1/count-my-posts';
+
+    final data = {
+      "token": token,
+    };
+
+    var datadecode = json.encode(data);
+
+    final res = await http.post(
+      Uri.parse(url),
+      body: datadecode,
+      headers: {
+        'Content-Type': 'application/json ',
+      },
+    );
+
+    dynamic respuesta = json.decode(res.body);
+
+    print(respuesta);
+    return respuesta;
   }
 }
 

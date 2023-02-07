@@ -97,11 +97,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget ver() {
     return Container(
-      height: Adapt.hp(0.5),
-      width: Adapt.wp(0.5),
-      decoration: const BoxDecoration(
+      height: Adapt.hp(2),
+      width: Adapt.wp(2),
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/iconos/ver.png"),
+          fit: BoxFit.contain,
+          image: AssetImage("assets/eye.png"),
         ),
       ),
     );
@@ -109,9 +110,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget No_ver() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/iconos/ojo.png"),
+          fit: BoxFit.scaleDown,
+          image: AssetImage("assets/iconos/Trailingicon.png"),
         ),
       ),
     );
@@ -128,22 +130,22 @@ class _LoginPageState extends State<LoginPage> {
             Container(
                 child: Text("LOGIN",
                     style: TextStyle(
-                        fontSize: 36,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 101, 214, 242)))),
-            const SizedBox(
-              height: 8.0,
-            ),
+            SizedBox(height: Adapt.hp(2)),
             Container(
-                width: Adapt.wp(60),
-                child: Text(
-                    "We help content creators to monetize their content",
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 143, 151, 158)))),
-            const SizedBox(
-              height: 20.0,
+                width: Adapt.wp(58),
+                child: Center(
+                  child: Text(
+                      "We help content creators to monetize their content",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 143, 151, 158))),
+                )),
+            SizedBox(
+              height: Adapt.wp(8),
             ),
             _usuarioText(context),
             const SizedBox(
@@ -170,79 +172,99 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _usuarioText(BuildContext context) {
-    return TextFormField(
-      //keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-        label: Row(
-          children: [
-            Container(
-              height: Adapt.hp(5),
-              width: Adapt.wp(5),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/iconos/personIcon.png"),
+    return Container(
+      //color: Colors.red,
+      //height: Adapt.hp(10),
+      width: Adapt.wp(75),
+      child: Center(
+        child: TextFormField(
+          //keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+            label: Row(
+              children: [
+                Container(
+                  height: Adapt.hp(3),
+                  width: Adapt.wp(3),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/iconos/personIcon.png"),
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: Adapt.wp(2),
+                ),
+                Text("User",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 79, 78, 78),
+                    )),
+              ],
             ),
-            SizedBox(
-              width: Adapt.wp(2),
-            ),
-            Text("User",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                )),
-          ],
+          ),
+          onChanged: (value) {
+            _usuario = value;
+            _validarUser = _usuario.indexOf('@');
+          },
+          validator: (valor) {
+            if (valor == '') {
+              return 'El campo es obligatorio *';
+            } else {
+              if (_validarUser < 0) {
+                return 'El correo no es un correo valido*';
+              } else {
+                return null;
+              }
+            }
+          },
         ),
       ),
-      onChanged: (value) {
-        _usuario = value;
-        _validarUser = _usuario.indexOf('@');
-      },
-      validator: (valor) {
-        if (valor == '') {
-          return 'El campo es obligatorio *';
-        } else {
-          if (_validarUser < 0) {
-            return 'El correo no es un correo valido*';
-          } else {
-            return null;
-          }
-        }
-      },
     );
   }
 
   Widget _checkRecordarCredenciales(BuildContext context) {
     return Row(
       children: [
+        SizedBox(
+          width: Adapt.wp(6),
+        ),
+        Container(
+          width: Adapt.wp(6),
+          child: Theme(
+            data: ThemeData(
+              unselectedWidgetColor: Color.fromARGB(255, 70, 179, 222),
+            ),
+            child: CheckboxListTile(
+                activeColor: Color.fromARGB(255, 70, 179, 222),
+                checkColor: Color.fromARGB(255, 255, 255, 255),
+                value: _check,
+                onChanged: (valor) {
+                  _check = valor!;
+
+                  if (_check) {
+                    prefs.usuario = _usuario;
+                    prefs.password = _password;
+                    prefs.check = _check;
+                  } else {
+                    prefs.usuario = '';
+                    prefs.password = '';
+                    prefs.check = false;
+                  }
+
+                  setState(() {});
+                }),
+          ),
+        ),
+        SizedBox(
+          width: Adapt.wp(3),
+        ),
         Text("Acepto Terminos",
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.bold,
             )),
-        Container(
-          width: Adapt.wp(30),
-          child: CheckboxListTile(
-              activeColor: Colors.white,
-              checkColor: Colors.blue,
-              value: _check,
-              onChanged: (valor) {
-                _check = valor!;
-
-                if (_check) {
-                  prefs.usuario = _usuario;
-                  prefs.password = _password;
-                  prefs.check = _check;
-                } else {
-                  prefs.usuario = '';
-                  prefs.password = '';
-                  prefs.check = false;
-                }
-
-                setState(() {});
-              }),
-        ),
       ],
     );
   }
@@ -258,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialogCustom(
-              bodyText: respuestas["error"].toString(),
+              bodyText: "ERROR: Checkout your credentials and try again",
               bottonAcept: 'false',
               bottonCancel: Container(),
             );
@@ -318,7 +340,7 @@ class _LoginPageState extends State<LoginPage> {
             )
           }
       },
-      child: Text("Ingresar",
+      child: Text("Login",
           style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -327,52 +349,57 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _passwordText(BuildContext context) {
-    return TextFormField(
-      obscureText: _mostrarPassword == true ? true : false,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-          label: Row(
-            children: [
-              Container(
-                height: Adapt.hp(5),
-                width: Adapt.wp(5),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/iconos/candadoIcon.png"),
+    return Container(
+      width: Adapt.wp(75),
+      child: TextFormField(
+        obscureText: _mostrarPassword == true ? true : false,
+        decoration: InputDecoration(
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+            label: Row(
+              children: [
+                Container(
+                  height: Adapt.hp(3),
+                  width: Adapt.wp(3),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/iconos/candadoIcon.png"),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: Adapt.wp(2),
-              ),
-              Text("Password",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  )),
-            ],
-          ),
-          suffixIcon: InkWell(
-            onTap: () {
-              _mostrarPassword = !_mostrarPassword;
-              setState(() {});
-            }, //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            child: Container(
-              height: Adapt.hp(1),
-              width: Adapt.wp(1),
-              child: _mostrarPassword == true ? ver() : No_ver(),
+                SizedBox(
+                  width: Adapt.wp(2),
+                ),
+                Text("Password",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 79, 78, 78),
+                    )),
+                SizedBox(
+                  width: Adapt.wp(10),
+                ),
+              ],
             ),
-          )),
-      onChanged: (value) {
-        _password = value;
-        _validarPassword = _password.length;
-      },
-      validator: (valor) {
-        if (valor == '') {
-          return 'El campo es obligatorio *';
-        } else {
-          return null;
-        }
-      },
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  _mostrarPassword = !_mostrarPassword;
+                  setState(() {});
+                },
+                child: Container(
+                    width: Adapt.wp(1),
+                    child: _mostrarPassword == true ? ver() : No_ver()))),
+        onChanged: (value) {
+          _password = value;
+          _validarPassword = _password.length;
+        },
+        validator: (valor) {
+          if (valor == '') {
+            return 'El campo es obligatorio *';
+          } else {
+            return null;
+          }
+        },
+      ),
     );
   }
 
@@ -384,8 +411,17 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(
             children: [
+              SizedBox(
+                height: Adapt.hp(4),
+              ),
               Container(
-                child: Image(image: AssetImage("assets/fun2vie.png")),
+                height: Adapt.hp(18),
+                width: Adapt.wp(80),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/fun2vie.png"),
+                  ),
+                ),
               ),
               SizedBox(
                 height: Adapt.hp(5),

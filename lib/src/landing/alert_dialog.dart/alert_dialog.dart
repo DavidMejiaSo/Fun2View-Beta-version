@@ -39,8 +39,13 @@ class _AlertDialogCustomState extends State<AlertDialogCustom> {
           child: Center(
             child: Column(
               children: [
+                SizedBox(
+                  height: Adapt.hp(3),
+                ),
                 Container(
-                  child: Image(image: AssetImage("assets/fun2vie.png")),
+                  height: Adapt.hp(10),
+                  width: Adapt.wp(20),
+                  child: Image(image: AssetImage("assets/iconos/Alerta.png")),
                 ),
                 SizedBox(
                   height: Adapt.hp(5),
@@ -98,7 +103,7 @@ class _AlertDialogCustomState extends State<AlertDialogCustom> {
           ),
         ),
         SizedBox(
-          height: widget.bodyText.length > 50 ? Adapt.hp(1) : Adapt.hp(10),
+          height: widget.bodyText.length > 40 ? Adapt.hp(1) : Adapt.hp(10),
         ),
       ],
     );
