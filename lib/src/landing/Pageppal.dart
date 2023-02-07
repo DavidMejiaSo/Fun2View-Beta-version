@@ -287,49 +287,51 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
+  Widget Notisvacias() {
+    return Center(
+      child: Container(
+        color: Color.fromARGB(255, 248, 248, 248),
+        child: Center(
+            child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/iconos/drawer/Nonot.png"),
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
+              width: Adapt.wp(10),
+              height: Adapt.hp(10),
+            ),
+            Text("No notification yet",
+                style: TextStyle(
+                  textBaseline: TextBaseline.ideographic,
+                  color: Color.fromARGB(255, 145, 145, 145),
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                )),
+          ],
+        )),
+      ),
+    );
+  }
+
   Widget NotisLista() {
     return Container(
-      decoration: BoxDecoration(
-          color: Color.fromARGB(255, 226, 246, 255),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-            bottomLeft: Radius.circular(30),
-          )),
-      height: Adapt.hp(30),
-      width: Adapt.wp(50),
-      child: (UserSimplePreferences.getPets() ?? []).isNotEmpty
-          ? listadoNotis(UserSimplePreferences.getPets() ?? [])
-          : Center(
-              child: Container(
-                height: Adapt.hp(30),
-                width: Adapt.wp(30),
-                child: Center(
-                    child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/fun2vie.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      width: Adapt.wp(30),
-                      height: Adapt.hp(10),
-                    ),
-                    Text("You don't have notifications yet..:(",
-                        style: TextStyle(
-                          textBaseline: TextBaseline.ideographic,
-                          color: Color.fromARGB(255, 15, 208, 225),
-                          fontSize: 16,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w700,
-                        )),
-                  ],
-                )),
-              ),
-            ),
-    );
+        decoration: BoxDecoration(
+            color: Color.fromARGB(255, 226, 246, 255),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+              bottomLeft: Radius.circular(30),
+            )),
+        height: Adapt.hp(30),
+        width: Adapt.wp(50),
+        child: (UserSimplePreferences.getPets() ?? []).isNotEmpty
+            ? listadoNotis(UserSimplePreferences.getPets() ?? [])
+            : Notisvacias());
   }
 
   Widget barraPpal() {
@@ -467,7 +469,7 @@ class _Pageppal extends State<Pageppal> {
         (notis == true)
             ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
             : Container(),
-        Align(alignment: Alignment.bottomRight, child: BottomPpal())
+        Align(alignment: Alignment(0.90, 0.95), child: BottomPpal())
       ],
     );
   }
@@ -499,11 +501,16 @@ class _Pageppal extends State<Pageppal> {
                         width: Adapt.wp(15),
                       ),
                       Text(snapshot.data["posts"].toString()),
-                      SizedBox(height: Adapt.hp(2)),
                       SizedBox(
-                        width: Adapt.wp(2),
+                        height: Adapt.hp(2),
                       ),
-                      Text("Post")
+                      Text("Post",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
                     ],
                   ),
                   SizedBox(
@@ -513,7 +520,13 @@ class _Pageppal extends State<Pageppal> {
                     children: [
                       Text(snapshot.data["photos"].toString()),
                       SizedBox(height: Adapt.hp(2)),
-                      Text("Photos")
+                      Text("Photos",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
                     ],
                   ),
                   SizedBox(
@@ -523,7 +536,13 @@ class _Pageppal extends State<Pageppal> {
                     children: [
                       Text(snapshot.data["likes"].toString()),
                       SizedBox(height: Adapt.hp(2)),
-                      Text("Likes")
+                      Text("Likes",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
                     ],
                   ),
                   SizedBox(
@@ -533,7 +552,13 @@ class _Pageppal extends State<Pageppal> {
                     children: [
                       Text(snapshot.data["video"].toString()),
                       SizedBox(height: Adapt.hp(2)),
-                      Text("video")
+                      Text("Video",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
                     ],
                   ),
                   SizedBox(
@@ -899,10 +924,10 @@ class _Pageppal extends State<Pageppal> {
       },
       child: CircleAvatar(
         backgroundColor: Color.fromARGB(255, 15, 208, 225),
-        radius: 38.5,
+        radius: 32.5,
         child: Text("+",
             style: TextStyle(
-              fontSize: 46,
+              fontSize: 29,
               fontStyle: FontStyle.normal,
               //fontWeight: FontWeight.w700,
               color: Color.fromARGB(255, 255, 255, 255),

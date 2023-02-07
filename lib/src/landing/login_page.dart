@@ -97,12 +97,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget ver() {
     return Container(
-      height: Adapt.hp(2),
-      width: Adapt.wp(2),
+      height: Adapt.hp(1),
+      width: Adapt.wp(1),
       decoration: BoxDecoration(
         image: DecorationImage(
-          fit: BoxFit.contain,
-          image: AssetImage("assets/eye.png"),
+          fit: BoxFit.scaleDown,
+          image: AssetImage("assets/blind.png"),
         ),
       ),
     );
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.scaleDown,
-          image: AssetImage("assets/iconos/Trailingicon.png"),
+          image: AssetImage("assets/blind.png"),
         ),
       ),
     );

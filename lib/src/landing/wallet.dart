@@ -1,4 +1,5 @@
 import 'dart:convert';
+//import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,12 @@ class walletPage extends StatefulWidget {
 class _walletPageState extends State<walletPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final prefs = PreferenciasUsuario();
+  final Uri _url = Uri.parse('https://design2.fun2view.com');
   String balance = "";
+  dynamic wid;
+  dynamic wid_t;
+  dynamic total;
+
   bool notis = false;
   final Mywallet = infoWallet();
   @override
@@ -29,6 +35,12 @@ class _walletPageState extends State<walletPage> {
     Cuerpo_pantalla();
     setState(() {});
     super.initState();
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
   Widget build(BuildContext context) {
@@ -84,7 +96,7 @@ class _walletPageState extends State<walletPage> {
                   width: Adapt.wp(5),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/iconos/home.png"),
+                      image: AssetImage("assets/iconos/Homep.png"),
                     ),
                   ),
                 ),
@@ -101,7 +113,7 @@ class _walletPageState extends State<walletPage> {
                     width: Adapt.wp(5),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/iconos/wallet.png"),
+                        image: AssetImage("assets/iconos/walletIcon.png"),
                       ),
                     ),
                   ),
@@ -115,7 +127,7 @@ class _walletPageState extends State<walletPage> {
                   width: Adapt.wp(5),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/iconos/sobre.png"),
+                      image: AssetImage("assets/iconos/notificacionIcon.png"),
                     ),
                   ),
                 ),
@@ -222,47 +234,18 @@ class _walletPageState extends State<walletPage> {
 
   Widget NotisLista() {
     return Container(
-      decoration: BoxDecoration(
-          color: Color.fromARGB(255, 255, 255, 255),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-            bottomLeft: Radius.circular(30),
-          )),
-      height: Adapt.hp(30),
-      width: Adapt.wp(50),
-      child: (UserSimplePreferences.getPets() ?? []).isNotEmpty
-          ? listadoNotis(UserSimplePreferences.getPets() ?? [])
-          : Center(
-              child: Container(
-                height: Adapt.hp(30),
-                width: Adapt.wp(30),
-                child: Center(
-                    child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/fun2vie.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      width: Adapt.wp(40),
-                      height: Adapt.hp(8),
-                    ),
-                    Text("You don't have notifications yet..:(",
-                        style: TextStyle(
-                          textBaseline: TextBaseline.ideographic,
-                          color: Color.fromARGB(255, 15, 208, 225),
-                          fontSize: 16,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w700,
-                        )),
-                  ],
-                )),
-              ),
-            ),
-    );
+        decoration: BoxDecoration(
+            color: Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+              bottomLeft: Radius.circular(30),
+            )),
+        height: Adapt.hp(30),
+        width: Adapt.wp(50),
+        child: (UserSimplePreferences.getPets() ?? []).isNotEmpty
+            ? listadoNotis(UserSimplePreferences.getPets() ?? [])
+            : Notisvacias());
   }
 
   Widget barraPpal() {
@@ -351,13 +334,18 @@ class _walletPageState extends State<walletPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: Adapt.hp(15),
+                  height: Adapt.hp(10),
+                ),
+                tittleWallet(),
+                SizedBox(
+                  height: Adapt.hp(8),
                 ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
+                    color: Color.fromARGB(255, 205, 230, 251),
                     width: Adapt.wp(90),
-                    child: balanceContainer(),
+                    child: WalletInfo(),
                   ),
                 ),
                 SizedBox(
@@ -376,137 +364,231 @@ class _walletPageState extends State<walletPage> {
     );
   }
 
-  void traerinfoWallet() async {
-    final respuestas = await Mywallet.Mywallet(prefs.token);
-    print(respuestas);
-    print(respuestas["balance"]);
-    balance = respuestas["balance"];
-    print("oeoeooee es aqui");
-    print(balance);
-  }
-
-  Widget tittleWallet() {
-    return Container(
-      color: Color.fromARGB(255, 104, 183, 247),
-      child: Row(
-        children: [
-          Container(
-            height: Adapt.hp(8),
-            width: Adapt.wp(8),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/flechaback.png"),
+  Widget Notisvacias() {
+    return Center(
+      child: Container(
+        color: Color.fromARGB(255, 248, 248, 248),
+        child: Center(
+            child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/iconos/drawer/Nonot.png"),
+                  fit: BoxFit.scaleDown,
+                ),
               ),
+              width: Adapt.wp(10),
+              height: Adapt.hp(10),
             ),
-          ),
-          SizedBox(
-            width: Adapt.wp(8),
-          ),
-          Text("My Wallet",
-              style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255))),
-          SizedBox(
-            width: Adapt.wp(5),
-          ),
-        ],
+            Text("No notification yet",
+                style: TextStyle(
+                  textBaseline: TextBaseline.ideographic,
+                  color: Color.fromARGB(255, 145, 145, 145),
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                )),
+          ],
+        )),
       ),
     );
   }
 
-  Widget balanceContainer() {
-    return Column(
-      children: [
-        tittleWallet(),
-        SizedBox(
-          height: Adapt.hp(8),
-        ),
-        Text("You have available....",
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-            )),
-        SizedBox(
-          height: Adapt.hp(5),
-        ),
-        Container(
-          decoration: BoxDecoration(
-              color: Color.fromARGB(255, 5, 174, 230),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-              )),
-          child: Row(
-            children: [
-              SizedBox(
-                width: Adapt.wp(8),
-              ),
-              Text(prefs.balance,
-                  style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 220, 248, 255))),
-              SizedBox(
-                width: Adapt.wp(5),
-              ),
-              Text("USD",
-                  style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 220, 248, 255))),
-              SizedBox(
-                width: Adapt.wp(18),
-              ),
-              Transform(
-                child: Container(
-                  height: Adapt.hp(8),
-                  width: Adapt.wp(8),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/wallet.png"),
-                    ),
-                  ),
+  Widget tittleWallet() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Container(
+        width: Adapt.wp(95),
+        color: Color.fromARGB(255, 63, 217, 255),
+        child: Row(
+          children: [
+            SizedBox(
+              width: Adapt.wp(2),
+            ),
+            Container(
+              height: Adapt.hp(8),
+              width: Adapt.wp(8),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/flechaback.png"),
                 ),
-                transform: new Matrix4.identity()
-                  ..rotateZ(60 * 3.1415927 / 180),
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              width: Adapt.wp(23),
+            ),
+            Text(" Wallet",
+                style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 255, 255, 255))),
+            SizedBox(
+              width: Adapt.wp(5),
+            ),
+          ],
         ),
-        SizedBox(
-          height: Adapt.hp(3),
-        ),
-        Text(
-            "If you want more information about your wallet you can go to the website...",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )),
-        SizedBox(
-          height: Adapt.hp(3),
-        ),
-        GestureDetector(
-          onLongPress: () async {},
-          child: Text("https://design2.fun2view.com/",
-              style: TextStyle(
-                color: Color.fromARGB(255, 9, 92, 193),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
-        )
-      ],
+      ),
     );
+  }
+
+  Widget WalletInfo() {
+    return FutureBuilder(
+        future: infoWallet().Mywallet(prefs.token),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            // wid_t = snapshot.data["withdrawls_pending"].toInt();
+            // wid = snapshot.data["withdrawls"].toInt();
+            // total = snapshot.data["withdrawls_pending"] +
+            //     snapshot.data["withdrawls"] +
+            //     snapshot.data["balance"];
+            // int total = snapshot.data["balance"] +
+            //     snapshot.data["withdrawls"] +
+            //     snapshot.data["withdrawls_pending"];
+            // String totalII = total.toString();
+            return Column(
+              children: [
+                SizedBox(
+                  height: Adapt.hp(8),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Text("You Have Available",
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+                SizedBox(
+                  height: Adapt.hp(2),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Text("Total",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 130, 130, 130),
+                        )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Container(
+                      height: Adapt.hp(8),
+                      width: Adapt.wp(8),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/iconos/signoPeso.png"),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Text("56.8",
+                        style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 0, 0, 0))),
+                    SizedBox(
+                      width: Adapt.wp(7),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Text("My balance",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 130, 130, 130))),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Container(
+                      height: Adapt.hp(8),
+                      width: Adapt.wp(8),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/iconos/signoPeso.png"),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: Adapt.wp(2),
+                    ),
+                    Text(snapshot.data["balance"].toString(),
+                        style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 0, 0, 0))),
+                    SizedBox(
+                      width: Adapt.wp(5),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: Adapt.hp(3),
+                ),
+                Container(
+                  height: Adapt.hp(12),
+                  width: Adapt.wp(65),
+                  child: Text(
+                      "If you want more information about your wallet you can go to the website...",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 130, 130, 130),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                SizedBox(
+                  height: Adapt.hp(3),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    _launchUrl();
+                  },
+                  child: Text("https://design2.fun2view.com/",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 9, 92, 193),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                SizedBox(
+                  height: Adapt.hp(3),
+                )
+              ],
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 }
 
 class infoWallet extends ChangeNotifier {
   Future<dynamic> Mywallet(String token) async {
-    final prefs = PreferenciasUsuario();
-
     String url = 'https://design2.fun2view.com/mobile/v1/my-wallet';
 
     final Map<String, String> data = {"token": token};
@@ -526,5 +608,33 @@ class infoWallet extends ChangeNotifier {
 
     return respuesta;
 //
+  }
+}
+
+class Wallet_service {
+  final prefs = PreferenciasUsuario();
+  Future<dynamic> myWallet(
+    String token,
+  ) async {
+    String url = 'https://design2.fun2view.com/mobile/v1/my-wallet';
+
+    final data = {
+      "token": token,
+    };
+
+    var datadecode = json.encode(data);
+
+    final res = await http.post(
+      Uri.parse(url),
+      body: datadecode,
+      headers: {
+        'Content-Type': 'application/json ',
+      },
+    );
+
+    dynamic respuesta = json.decode(res.body);
+
+    print(respuesta);
+    return respuesta;
   }
 }

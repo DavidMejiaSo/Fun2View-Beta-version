@@ -75,22 +75,25 @@ class _WelcomePageState extends State<WelcomePage> {
                 Center(
                     child: Text("Bienvenido",
                         style: const TextStyle(
-                            fontSize: 36,
+                            fontSize: 26,
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 101, 214, 242)))),
                 spaceBetween,
                 profilePhoto(),
+                SizedBox(
+                  height: Adapt.hp(2),
+                ),
                 Center(
                     child: Text(prefs.usuario,
                         style: TextStyle(
-                            fontSize: 46,
+                            fontSize: 36,
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 101, 214, 242)))),
                 Center(
                     child: Text("App para creadores",
                         style: TextStyle(
                           color: Color.fromARGB(255, 151, 165, 176),
-                          fontSize: 26,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ))),
                 spaceBetween,
@@ -106,13 +109,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 SizedBox(
                   height: Adapt.hp(2),
                 ),
-                Center(
-                    child: Text("GRACIAS POR TU APOYO",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ))),
                 spaceBetween,
+                SizedBox(
+                  height: Adapt.hp(2),
+                ),
                 Container(
                   height: Adapt.hp(6),
                   width: Adapt.wp(40),

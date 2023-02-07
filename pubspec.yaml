@@ -103,6 +103,11 @@ flutter:
     - assets/iconos/drawer/posts.png
     - assets/iconos/ojo.png
     - assets/iconos/Homep.png
+    - assets/iconos/peso.png
+    - assets/iconos/signoPeso.png
+    - assets/iconos/drawer/Nonot.png
+    - assets/blind.png
+  
 
     - assets/iconos/walletIcon.png
     - assets/iconos/notificacionIcon.png
