@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fun2view_appli/src/Preferencias/preferencias.dart';
+import 'package:fun2view_appli/src/host.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Responsive/Adapt.dart';
@@ -22,11 +23,10 @@ class _walletPageState extends State<walletPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final prefs = PreferenciasUsuario();
   final Uri _url = Uri.parse('https://design2.fun2view.com');
-  String balance = "";
-  dynamic wid;
-  dynamic wid_t;
-  dynamic total;
-
+  double balance = 0;
+  double wid = 0;
+  double wid_t = 0;
+  double total = 0;
   bool notis = false;
   final Mywallet = infoWallet();
   @override
@@ -439,7 +439,17 @@ class _walletPageState extends State<walletPage> {
         future: infoWallet().Mywallet(prefs.token),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // wid_t = snapshot.data["withdrawls_pending"].toInt();
+            wid = double.parse(snapshot.data["withdrawls"]);
+            wid_t = double.parse(snapshot.data["withdrawls"]);
+            balance = double.parse(snapshot.data["balance"]);
+
+            total = wid + wid_t + balance;
+
+            // var wid_p =
+            //     int.parse(snapshot.data["withdrawls_pending"].toString());
+            // var balance = int.parse(snapshot.data["balance"].toString());
+            // var total = wid + wid_p + balance;
+            // // wid_t = snapshot.data["withdrawls_pending"].toInt();
             // wid = snapshot.data["withdrawls"].toInt();
             // total = snapshot.data["withdrawls_pending"] +
             //     snapshot.data["withdrawls"] +
@@ -473,7 +483,7 @@ class _walletPageState extends State<walletPage> {
                     SizedBox(
                       width: Adapt.wp(2),
                     ),
-                    Text("Total",
+                    Text("Total earn",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -498,7 +508,7 @@ class _walletPageState extends State<walletPage> {
                     SizedBox(
                       width: Adapt.wp(2),
                     ),
-                    Text("56.8",
+                    Text(total.toString(),
                         style: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
@@ -589,7 +599,7 @@ class _walletPageState extends State<walletPage> {
 
 class infoWallet extends ChangeNotifier {
   Future<dynamic> Mywallet(String token) async {
-    String url = 'https://design2.fun2view.com/mobile/v1/my-wallet';
+    String url = '${apiHost}my-wallet';
 
     final Map<String, String> data = {"token": token};
 
@@ -616,7 +626,7 @@ class Wallet_service {
   Future<dynamic> myWallet(
     String token,
   ) async {
-    String url = 'https://design2.fun2view.com/mobile/v1/my-wallet';
+    String url = '${apiHost}my-wallet';
 
     final data = {
       "token": token,

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fun2view_appli/Responsive/Adapt.dart';
+import 'package:fun2view_appli/src/host.dart';
 import 'package:fun2view_appli/src/landing/profile_page.dart';
 import 'package:fun2view_appli/src/landing/Routes/routes.dart';
 
@@ -466,7 +467,7 @@ class LoginServiceL extends ChangeNotifier {
   Future<dynamic> login(String usuario, String password) async {
     final prefs = PreferenciasUsuario();
 
-    String url = 'https://design2.fun2view.com/mobile/v1/auth/login';
+    String url = '${apiHost}auth/login';
 
     final Map<String, String> data = {"email": usuario, "password": password};
 
@@ -519,7 +520,7 @@ class LoginServiceL extends ChangeNotifier {
   }
 
   Future<String> checkToken() async {
-    String url = 'https://design2.fun2view.com/mobile/v1/auth/login';
+    String url = '${apiHost}auth/login';
     final res = await http.get(
       Uri.parse(url),
       headers: {

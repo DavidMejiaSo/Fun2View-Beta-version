@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fun2view_appli/Responsive/Adapt.dart';
 import 'package:fun2view_appli/src/Preferencias/preferencias.dart';
+import 'package:fun2view_appli/src/host.dart';
 import 'package:http/http.dart' as http;
 
 class WelcomePage extends StatefulWidget {
@@ -179,7 +180,7 @@ class _WelcomePageState extends State<WelcomePage> {
 class GetUserInfoService {
   final prefs = PreferenciasUsuario();
   Future<dynamic> getInfo() async {
-    final url = 'https://design2.fun2view.com/mobile/v1/user/fcm-token';
+    final url = '${apiHost}user/fcm-token';
 
     final res = await http.get(
       Uri.parse(url),

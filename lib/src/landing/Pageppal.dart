@@ -5,7 +5,8 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fun2view_appli/Responsive/Adapt.dart';
-import 'package:fun2view_appli/src/controller/posts_controller.dart';
+import 'package:fun2view_appli/src/host.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -984,14 +985,16 @@ class _Pageppal extends State<Pageppal> {
         SizedBox(
           width: Adapt.wp(25),
         ),
-        Text(prefs.usuario,
-            style: TextStyle(
-              textBaseline: TextBaseline.ideographic,
-              color: Color.fromARGB(255, 15, 208, 225),
-              fontSize: 36,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w700,
-            )),
+        Center(
+          child: Text(prefs.usuario,
+              style: TextStyle(
+                textBaseline: TextBaseline.ideographic,
+                color: Color.fromARGB(255, 15, 208, 225),
+                fontSize: 36,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w700,
+              )),
+        ),
         SizedBox(
           width: Adapt.wp(2),
         ),
@@ -1099,10 +1102,22 @@ class _Pageppal extends State<Pageppal> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _enviarPost();
-                        Navigator.pushReplacementNamed(
-                            context, '/pantallappal');
-                        setState(() {});
+                        if (comentario == "" || comentario == null) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialogCustom(
+                                  bodyText: "Recuerda publicar un comentario",
+                                  bottonAcept: 'false',
+                                  bottonCancel: Container(),
+                                );
+                              });
+                        } else {
+                          _enviarPost();
+                          Navigator.pushReplacementNamed(
+                              context, '/pantallappal');
+                          setState(() {});
+                        }
                       },
                       child: Card(
                         color: Color.fromARGB(255, 88, 175, 246),
@@ -1245,7 +1260,7 @@ class Myposts_service {
   Future<dynamic> myLikes(
     String token,
   ) async {
-    String url = 'https://design2.fun2view.com/mobile/v1/count-my-posts';
+    String url = '${apiHost}count-my-posts';
 
     final data = {
       "token": token,
