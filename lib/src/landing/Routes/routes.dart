@@ -8,6 +8,10 @@ import 'package:fun2view_appli/src/landing/login_page.dart';
 import 'package:fun2view_appli/src/landing/profile_page.dart';
 import 'package:fun2view_appli/src/landing/wallet.dart';
 
+import '../../Notifications/Notifications.dart';
+import '../../Notifications/Notifications_firebase.dart';
+import '../../Notifications/listadoNotis.dart';
+
 class Routes extends StatefulWidget {
   const Routes({Key? key}) : super(key: key);
 
@@ -28,16 +32,14 @@ class _RoutesState extends State<Routes> {
 
   @override
   Widget build(BuildContext context) {
+    new GlobalKey<NavigatorState>();
+
+    final GlobalKey<ScaffoldMessengerState> messengerKey =
+        new GlobalKey<ScaffoldMessengerState>();
     return MaterialApp(
+      scaffoldMessengerKey: messengerKey,
       // localizationsDelegates: const [],
 //
-      // supportedLocales: const [
-//
-      //   Locale('es', ''), // Spanish, no country code
-//
-      //   Locale('en', ''), // English, no country code
-//
-      // ],
 
       debugShowCheckedModeBanner: false,
 

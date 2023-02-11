@@ -4,6 +4,7 @@ import 'package:fun2view_appli/src/Notifications/Notifications_firebase.dart';
 import 'package:fun2view_appli/src/Notifications/listadoNotis.dart';
 import 'package:fun2view_appli/src/Preferencias/preferencias.dart';
 import 'package:fun2view_appli/src/landing/Routes/routes.dart';
+import 'package:fun2view_appli/src/landing/alert_dialog.dart/alert_dialog.dart';
 import 'package:fun2view_appli/src/landing/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 //import 'dart:html';
@@ -40,18 +41,25 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     PushNotificationService.messagesStream.listen((message) async {
       print('MyApp: $message');
-      final snack =
-          NotificationService().showNotification(12, message, "Fun2View", 2);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialogCustom(
+            bodyText: message,
+            bottonAcept: 'false',
+            bottonCancel: Container(),
+          );
+        },
+      );
 
-      final mens = SnackBar(content: Text("Nueva notificaicon: $message"));
+      final mens = SnackBar(
+          content: Text("Nueva notificaicon: $message"),
+          duration: Duration(seconds: 2));
 
-      navigatorKey.currentState
-          ?.pushNamed("/NotificationPage", arguments: message);
       messengerKey.currentState?.showSnackBar(mens);
 
       await UserSimplePreferences.setPets(notisListado.notis);
-      print("Aqui es mi rey");
-      print(UserSimplePreferences.getPets() ?? []);
+
       setState(() {});
     });
     super.initState();

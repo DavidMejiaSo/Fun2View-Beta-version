@@ -440,24 +440,11 @@ class _walletPageState extends State<walletPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             wid = double.parse(snapshot.data["withdrawls"]);
-            wid_t = double.parse(snapshot.data["withdrawls"]);
+            wid_t = double.parse(snapshot.data["withdrawls_pending"]);
             balance = double.parse(snapshot.data["balance"]);
 
             total = wid + wid_t + balance;
 
-            // var wid_p =
-            //     int.parse(snapshot.data["withdrawls_pending"].toString());
-            // var balance = int.parse(snapshot.data["balance"].toString());
-            // var total = wid + wid_p + balance;
-            // // wid_t = snapshot.data["withdrawls_pending"].toInt();
-            // wid = snapshot.data["withdrawls"].toInt();
-            // total = snapshot.data["withdrawls_pending"] +
-            //     snapshot.data["withdrawls"] +
-            //     snapshot.data["balance"];
-            // int total = snapshot.data["balance"] +
-            //     snapshot.data["withdrawls"] +
-            //     snapshot.data["withdrawls_pending"];
-            // String totalII = total.toString();
             return Column(
               children: [
                 SizedBox(

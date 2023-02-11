@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fun2view_appli/Responsive/Adapt.dart';
 import 'package:fun2view_appli/src/host.dart';
+import 'package:fun2view_appli/src/landing/profile_page.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -337,9 +338,8 @@ class _Pageppal extends State<Pageppal> {
 
   Widget barraPpal() {
     return Container(
+      //width: double.infinity,
       color: Colors.white,
-      height: Adapt.hp(10),
-      width: double.infinity,
       child: Column(
         children: [
           SizedBox(
@@ -410,68 +410,164 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
-  Widget Cuerpo_pantalla() {
-    return Stack(
-      children: [
-        SingleChildScrollView(
-          child: GestureDetector(
-            onDoubleTap: () {
-              _key.currentState!.openDrawer();
-              notis = false;
-              setState(() {});
-            },
-            child: Container(
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: Adapt.hp(12),
-                  ),
-                  ImagenesAvatarPortada(),
-                  SizedBox(
-                    height: Adapt.hp(3),
-                  ),
-                  Nameuser(),
-                  SizedBox(
-                    height: Adapt.hp(2),
-                  ),
-                  Align(
-                      alignment: Alignment.center,
-                      child:
-                          Container(width: Adapt.wp(70), child: NameuserDes())),
-                  SizedBox(
-                    height: Adapt.hp(8),
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
+  Widget barraPpalLand() {
+    //Barra para cuando gire
+    return Container(
+      //width: double.infinity,
+      color: Colors.white,
+      child: Column(
+        children: [
+          SizedBox(
+            height: Adapt.hp(4),
+          ),
+          Center(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: Adapt.wp(16),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _key.currentState!.openDrawer();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    radius: 15.5,
+                    child: Container(
+                        // color: Colors.red,
+                        height: Adapt.hp(10),
                         width: Adapt.wp(10),
-                      ),
-                      userInfo(),
-                    ],
+                        child: Image.asset("assets/iconos/menu.png")),
+                  ), //COntainer para evitar usar Scaffold
+                ),
+                SizedBox(
+                  width: Adapt.wp(10),
+                ),
+                Container(
+                  height: Adapt.hp(6),
+                  width: Adapt.wp(50),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/fun2vie.png"),
+                    ),
                   ),
-                  SizedBox(
-                    height: Adapt.hp(8),
+                ),
+                SizedBox(
+                  width: Adapt.wp(9),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (notis == true) {
+                        notis = false;
+                      } else {
+                        notis = true;
+                      }
+                      setState(() {});
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      radius: 18.5,
+                      child: Container(
+                          height: Adapt.hp(6),
+                          width: Adapt.wp(6),
+                          child: Image.asset(
+                              "assets/iconos/drawer/Notificacion.png")),
+                    ),
                   ),
-                  newPublication(),
-                  SizedBox(
-                    height: Adapt.hp(2),
-                  ),
-                  posts_List(),
-                  SizedBox(
-                    height: Adapt.hp(5),
-                  ),
-                ],
-              ),
+                ), //COntainer para evitar usar Scaffold
+              ],
             ),
           ),
-        ),
-        barraPpal(),
-        (notis == true)
-            ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
-            : Container(),
-        Align(alignment: Alignment(0.90, 0.95), child: BottomPpal())
-      ],
+        ],
+      ),
+    );
+  }
+
+  Widget Cuerpo_pantalla() {
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              child: GestureDetector(
+                onDoubleTap: () {
+                  _key.currentState!.openDrawer();
+                  notis = false;
+                  setState(() {});
+                },
+                child: Container(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: Adapt.hp(12),
+                      ),
+                      ImagenesAvatarPortada(),
+                      SizedBox(
+                        height: Adapt.hp(3),
+                      ),
+                      orientation == Orientation.portrait
+                          ? Nameuser()
+                          : Nameuserland(),
+                      SizedBox(
+                        height: Adapt.hp(2),
+                      ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                              width: orientation == Orientation.portrait
+                                  ? Adapt.wp(70)
+                                  : Adapt.wp(95),
+                              child: orientation == Orientation.portrait
+                                  ? NameuserDes()
+                                  : NameuserDesLand())),
+                      SizedBox(
+                        height: Adapt.hp(8),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: orientation == Orientation.portrait
+                                ? Adapt.wp(10)
+                                : Adapt.wp(55),
+                          ),
+                          orientation == Orientation.portrait
+                              ? userInfo()
+                              : userInfoLand(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: Adapt.hp(8),
+                      ),
+                      newPublication(),
+                      SizedBox(
+                        height: Adapt.hp(2),
+                      ),
+                      posts_List(),
+                      SizedBox(
+                        height: Adapt.hp(5),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+                height: Adapt.hp(12),
+                color: Colors.red,
+                child: Center(
+                    child: orientation == Orientation.portrait
+                        ? barraPpal()
+                        : barraPpalLand())),
+            (notis == true)
+                ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
+                : Container(),
+            Align(alignment: Alignment(0.90, 0.95), child: BottomPpal())
+          ],
+        );
+      },
     );
   }
 
@@ -573,8 +669,92 @@ class _Pageppal extends State<Pageppal> {
         });
   }
 
+  Widget userInfoLand() {
+    return FutureBuilder(
+        future: Myposts_service().myLikes(prefs.token),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: Adapt.wp(15),
+                      ),
+                      Text(snapshot.data["posts"].toString()),
+                      SizedBox(
+                        height: Adapt.hp(2),
+                      ),
+                      Text("Post",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Column(
+                    children: [
+                      Text(snapshot.data["photos"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      Text("Photos",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Column(
+                    children: [
+                      Text(snapshot.data["likes"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      Text("Likes",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Column(
+                    children: [
+                      Text(snapshot.data["video"].toString()),
+                      SizedBox(height: Adapt.hp(2)),
+                      Text("Video",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 12, 12, 12),
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                ],
+              ),
+            );
+          } else
+            return Container(child: Center(child: CircularProgressIndicator()));
+        });
+  }
+
   Widget posts_List() {
-    //Notificaciones principales
     return FutureBuilder(
         future: Myposts_service().myPost(prefs.token),
         builder: (context, snapshot) {
@@ -958,26 +1138,26 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
-//void getUserData() async {
-//  final getDataUser = GetUserInfoService();
-//  Map respuesta = await getDataUser.getInfo();
-//
-//  String? token = "";
-//  await FirebaseMessaging.instance.getToken().then((value) {
-//    token = value;
-//  });
-//  //respuesta["idTelefono"] = token;
-//  if (respuesta["idTelefono"] == "") {
-//    print("Está vacío mi reeeey");
-//    changeInfoUser.changeInfo("idTelefono", token);
-//    //changeInfoUser.actualizarUser(respuesta);
-//  } else if (respuesta["idTelefono"] != token) {
-//    print("Es diferente de TOKEN PAI");
-//    changeInfoUser.changeInfo("idTelefono", token);
-//  }
-// https://DavidMej:ATBBY7eSB5qwBuHwwEPKfrSZ6QgU885678AA@bitbucket.org/intel2saverd/fun2view-app.git
-//  setState(() {});
-//}
+  void getUserData() async {
+    final getDataUser = GetUserInfoService();
+    Map respuesta = await getDataUser.getInfo();
+
+    String? token = "";
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+    });
+    //respuesta["idTelefono"] = token;
+    if (respuesta["idTelefono"] == "") {
+      print("Está vacío mi reeeey");
+      //changeInfoUser.changeInfo("idTelefono", token);
+      //changeInfoUser.act)ualizarUser(respuesta);
+    } else if (respuesta["idTelefono"] != token) {
+      print("Es diferente de TOKEN PAI");
+      //changeInfoUser.changeInfo("idTelefono", token);
+    }
+    https: //DavidMej:ATBBY7eSB5qwBuHwwEPKfrSZ6QgU885678AA@bitbucket.org/intel2saverd/fun2view-app.git
+    setState(() {});
+  }
 
   Widget Nameuser() {
     return Row(
@@ -1017,10 +1197,58 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
+  Widget Nameuserland() {
+    //User name cuando es horizontal
+    return Row(
+      children: [
+        SizedBox(
+          width: Adapt.wp(65),
+        ),
+        Center(
+          child: Text(prefs.usuario,
+              style: TextStyle(
+                textBaseline: TextBaseline.ideographic,
+                color: Color.fromARGB(255, 15, 208, 225),
+                fontSize: 46,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w700,
+              )),
+        ),
+        SizedBox(
+          width: Adapt.wp(2),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await Share.share(
+                "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
+          },
+          child: Container(
+            height: Adapt.hp(10),
+            width: Adapt.wp(5),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/share.png"),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget NameuserDes() {
     return Text(prefs.descripcion,
         style: TextStyle(
           fontSize: 15,
+          color: Colors.grey,
+          fontWeight: FontWeight.bold,
+        ));
+  }
+
+  Widget NameuserDesLand() {
+    return Text(prefs.descripcion,
+        style: TextStyle(
+          fontSize: 25,
           color: Colors.grey,
           fontWeight: FontWeight.bold,
         ));
@@ -1046,40 +1274,98 @@ class _Pageppal extends State<Pageppal> {
                 SizedBox(
                   width: Adapt.wp(2),
                 ),
-                Padding(
-                    padding: EdgeInsets.all(Adapt.px(10)),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            width: 0.5),
-                      ),
-                      height: Adapt.hp(12),
-                      width: Adapt.wp(60),
-                      child: Center(
-                        child: TextField(
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(
-                              fontSize: Adapt.px(24),
-                              color: Color.fromARGB(255, 48, 49, 49)),
-                          maxLines: 3,
-                          maxLength: 85,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "New post...",
-                            hintStyle: TextStyle(
-                                fontSize: Adapt.px(20),
-                                color: Color.fromARGB(255, 99, 99, 99)),
+                Stack(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.all(Adapt.px(10)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                width: 0.5),
                           ),
-                          onChanged: (String value) {
-                            setState(() {
-                              comentario = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ))
+                          height: Adapt.hp(18),
+                          width: Adapt.wp(58),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                TextField(
+                                  keyboardType: TextInputType.text,
+                                  style: TextStyle(
+                                      fontSize: Adapt.px(24),
+                                      color: Color.fromARGB(255, 48, 49, 49)),
+                                  maxLines: 3,
+                                  maxLength: 85,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "New post...",
+                                    hintStyle: TextStyle(
+                                        fontSize: Adapt.px(20),
+                                        color: Color.fromARGB(255, 99, 99, 99)),
+                                  ),
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      comentario = value;
+                                    });
+                                  },
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (comentario == "" ||
+                                          comentario == null) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialogCustom(
+                                                bodyText:
+                                                    "Recuerda publicar un comentario",
+                                                bottonAcept: 'false',
+                                                bottonCancel: Container(),
+                                              );
+                                            });
+                                      } else {
+                                        _enviarPost();
+                                        Navigator.pushReplacementNamed(
+                                            context, '/pantallappal');
+                                        setState(() {});
+                                      }
+                                    },
+                                    child: Card(
+                                      color: Color.fromARGB(255, 88, 175, 246),
+                                      elevation: 10.2,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(14),
+                                              topRight: Radius.circular(14),
+                                              bottomLeft: Radius.circular(14),
+                                              bottomRight:
+                                                  Radius.circular(14))),
+                                      child: Container(
+                                        height: Adapt.hp(4),
+                                        width: Adapt.wp(18),
+                                        child: Center(
+                                          child: Text(
+                                            "Publish",
+                                            style: const TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )),
+                  ],
+                )
               ],
             ),
             SizedBox(
@@ -1099,49 +1385,6 @@ class _Pageppal extends State<Pageppal> {
                   children: [
                     SizedBox(
                       width: Adapt.wp(60),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (comentario == "" || comentario == null) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialogCustom(
-                                  bodyText: "Recuerda publicar un comentario",
-                                  bottonAcept: 'false',
-                                  bottonCancel: Container(),
-                                );
-                              });
-                        } else {
-                          _enviarPost();
-                          Navigator.pushReplacementNamed(
-                              context, '/pantallappal');
-                          setState(() {});
-                        }
-                      },
-                      child: Card(
-                        color: Color.fromARGB(255, 88, 175, 246),
-                        elevation: 10.2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(14),
-                                topRight: Radius.circular(14),
-                                bottomLeft: Radius.circular(14),
-                                bottomRight: Radius.circular(14))),
-                        child: Container(
-                          height: Adapt.hp(4),
-                          width: Adapt.wp(18),
-                          child: Center(
-                            child: Text(
-                              "Publish",
-                              style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(255, 255, 255, 255)),
-                            ),
-                          ),
-                        ),
-                      ),
                     ),
                     SizedBox(
                       width: Adapt.wp(4),
@@ -1210,7 +1453,7 @@ class Myposts_service {
   Future<dynamic> myPost(
     String token,
   ) async {
-    String url = 'https://design2.fun2view.com/mobile/v1/my-posts';
+    String url = '${apiHost}my-posts';
 
     final data = {
       "token": token,
@@ -1282,6 +1525,56 @@ class Myposts_service {
     return respuesta;
   }
 }
+
+class ChangeUserInfoService {
+  final prefs = PreferenciasUsuario();
+  Future<dynamic> changeInfo(campo, valor) async {
+    final url = '${apiHost}fcm-token';
+
+    final data = {
+      "$campo": "$valor",
+    };
+    var datadecode = json.encode(data);
+
+    final res = await http.put(
+      Uri.parse(url),
+      body: datadecode,
+      headers: {
+        'Authorization': 'Bearer ${prefs.token}',
+      },
+    );
+    print(res.statusCode);
+    print(datadecode);
+
+    Map respuesta = json.decode(res.body);
+    print(respuesta);
+    return respuesta;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //if (respuesta is String) {
 //  print(respuesta);
