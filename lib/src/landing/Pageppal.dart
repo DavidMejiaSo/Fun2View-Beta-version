@@ -9,6 +9,8 @@ import 'package:fun2view_appli/src/host.dart';
 import 'package:fun2view_appli/src/landing/profile_page.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
@@ -77,50 +79,122 @@ class _Pageppal extends State<Pageppal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _key,
-        body: RefreshIndicator(
-            color: Color.fromARGB(255, 15, 208, 225),
-            backgroundColor: Color.fromARGB(255, 255, 255, 255),
-            strokeWidth: 4.0,
-            onRefresh: () {
-              Navigator.pushNamed(context, '/pantallappal');
-              return Future<void>.delayed(const Duration(seconds: 3));
-            },
-            child: Cuerpo_pantalla()),
-        drawer: Drawer(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(70),
-                bottomRight: Radius.circular(400)),
-          ),
-          elevation: 2.5,
-          child: ListView(
-            children: [
-              DrawerHeader(
-                  child: Container(
-                width: double.infinity,
-                child: Column(children: [
-                  CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                      radius: 30.5,
-                      child: CircleAvatar(
-                        backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                        radius: 27.5,
-                        child: Image.network(prefs.coverPhoto),
-                      )),
-                  Text(prefs.usuario,
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 15, 208, 225),
-                        fontSize: 26,
-                        fontWeight: FontWeight.w400,
-                      )),
-                  Text("@User",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 167, 167, 167),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return Scaffold(
+            key: _key,
+            body: RefreshIndicator(
+                color: Color.fromARGB(255, 15, 208, 225),
+                backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                strokeWidth: 4.0,
+                onRefresh: () {
+                  Navigator.pushNamed(context, '/pantallappal');
+                  return Future<void>.delayed(const Duration(seconds: 3));
+                },
+                child: Cuerpo_pantalla()),
+            drawer: Drawer(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(70),
+                    bottomRight: orientation == Orientation.portrait
+                        ? Radius.circular(400)
+                        : Radius.circular(30)),
+              ),
+              elevation: 2.5,
+              child: ListView(
+                children: [
+                  DrawerHeader(
+                      child: Container(
+                    width: double.infinity,
+                    child: Column(children: [
+                      CircleAvatar(
+                          backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                          radius: 30.5,
+                          child: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                            radius: 27.5,
+                            child: Image.network(prefs.coverPhoto),
+                          )),
+                      Text(prefs.usuario,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 15, 208, 225),
+                            fontSize: 26,
+                            fontWeight: FontWeight.w400,
+                          )),
+                      Text("@User",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 167, 167, 167),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      SizedBox(
+                        height: Adapt.hp(2),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        height: Adapt.hp(0.2),
+                        width: double.infinity,
+                      )
+                    ]),
+                  )),
+                  ListTile(
+                    leading: Container(
+                      height: Adapt.hp(8),
+                      width: Adapt.wp(8),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/iconos/Homep.png"),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      'My Page',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/pantallappal');
+                    },
+                  ),
+                  ListTile(
+                      leading: Container(
+                        height: Adapt.hp(5),
+                        width: Adapt.wp(5),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/iconos/walletIcon.png"),
+                          ),
+                        ),
+                      ),
+                      title: Text('Wallet'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/walletPage');
+                      }),
+                  ListTile(
+                    leading: Container(
+                      height: Adapt.hp(5),
+                      width: Adapt.wp(5),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              AssetImage("assets/iconos/notificacionIcon.png"),
+                        ),
+                      ),
+                    ),
+                    title: Text('Notification'),
+                    onTap: () {
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (BuildContext context) {
+                      //     return AlertDialogCustom(
+                      //       bodyText: "Estamos Actualizando**",
+                      //       bottonAcept: 'false',
+                      //       bottonCancel: Container(),
+                      //     );
+                      //   },
+                      // );
+                      Navigator.pushNamed(context, '/NotificationPage');
+                    },
+                  ),
                   SizedBox(
                     height: Adapt.hp(2),
                   ),
@@ -128,95 +202,31 @@ class _Pageppal extends State<Pageppal> {
                     color: Colors.grey,
                     height: Adapt.hp(0.2),
                     width: double.infinity,
-                  )
-                ]),
-              )),
-              ListTile(
-                leading: Container(
-                  height: Adapt.hp(8),
-                  width: Adapt.wp(8),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/Homep.png"),
-                    ),
                   ),
-                ),
-                title: Text(
-                  'My Page',
-                  style: TextStyle(color: Colors.blue),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/pantallappal');
-                },
-              ),
-              ListTile(
-                  leading: Container(
+                  SizedBox(
                     height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/walletIcon.png"),
+                  ),
+                  ListTile(
+                      leading: Container(
+                        height: Adapt.hp(5),
+                        width: Adapt.wp(5),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image:
+                                AssetImage("assets/iconos/cerrar-sesion.png"),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  title: Text('Wallet'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/walletPage');
-                  }),
-              ListTile(
-                leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/notificacionIcon.png"),
-                    ),
-                  ),
-                ),
-                title: Text('Notification'),
-                onTap: () {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialogCustom(
-                  //       bodyText: "Estamos Actualizando**",
-                  //       bottonAcept: 'false',
-                  //       bottonCancel: Container(),
-                  //     );
-                  //   },
-                  // );
-                  Navigator.pushNamed(context, '/NotificationPage');
-                },
+                      title: Text('Logout'),
+                      onTap: () {
+                        Navigator.restorablePushNamed(context, '/login');
+                        prefs.limpiar();
+                      }),
+                ],
               ),
-              SizedBox(
-                height: Adapt.hp(2),
-              ),
-              Container(
-                color: Colors.grey,
-                height: Adapt.hp(0.2),
-                width: double.infinity,
-              ),
-              SizedBox(
-                height: Adapt.hp(5),
-              ),
-              ListTile(
-                  leading: Container(
-                    height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/cerrar-sesion.png"),
-                      ),
-                    ),
-                  ),
-                  title: Text('Logout'),
-                  onTap: () {
-                    Navigator.restorablePushNamed(context, '/login');
-                    prefs.limpiar();
-                  }),
-            ],
-          ),
-        ));
+            ));
+      },
+    );
   }
 
   Widget ImagenesAvatarPortada() {
@@ -424,7 +434,7 @@ class _Pageppal extends State<Pageppal> {
             child: Row(
               children: [
                 SizedBox(
-                  width: Adapt.wp(16),
+                  width: Adapt.wp(53),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -940,28 +950,6 @@ class _Pageppal extends State<Pageppal> {
         });
   }
 
-  void traerPosts() async {
-    String token = prefs.token;
-
-    dynamic respuestas = await Myposts_service().myPost(token);
-
-    postsText = respuestas["posts"];
-
-    //for (int i = 0; i < postsText.length; i++) {
-    //  for (Map description in postsText[i]) {
-    //    mediaImagen.add(description["media"]);
-    //  }
-    //}
-    ////print("Son estos $mediaImagen");
-//
-    //for (int i = 0; i < postsText.length; i++) {
-    //  for (Map description in postsText[i]) {
-    //    postsTDes.add(description["description"]);
-    //  }
-    //}
-    setState(() {});
-  }
-
   Widget Portadauser() {
     return Container(
       decoration: BoxDecoration(
@@ -976,12 +964,16 @@ class _Pageppal extends State<Pageppal> {
   }
 
   Widget Avataruser() {
-    return CircleAvatar(
-        radius: 60.5,
-        child: CircleAvatar(
-          radius: 57.5,
-          child: Image.network(prefs.coverPhoto),
-        ));
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return CircleAvatar(
+            radius: orientation == Orientation.portrait ? 60.5 : 120.5,
+            child: CircleAvatar(
+              radius: orientation == Orientation.portrait ? 57.5 : 117.5,
+              child: Image.network(prefs.coverPhoto),
+            ));
+      },
+    );
   }
 
   Widget AvataruserII() {
@@ -1007,113 +999,172 @@ class _Pageppal extends State<Pageppal> {
   }
 
   Widget BottomPpal() {
-    return GestureDetector(
-      onTap: () async {
-        setState(() {});
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  setState(() {});
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Column(
-                      children: [
-                        Column(
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return GestureDetector(
+          onTap: () async {
+            setState(() {});
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Column(
                           children: [
-                            SizedBox(
-                              height: Adapt.hp(35),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: Adapt.hp(35),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.gallery,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.square,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Cropper',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      Navigator.of(context).pop();
+                                      setState(() {});
+                                      return;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/blueGallery.png"),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.camera,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.square,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Cropper',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      Navigator.of(context).pop();
+                                      setState(() {});
+                                      return;
+                                    }
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/Bluecamara.png"),
+                                  ),
+                                )
+                              ],
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                final picker = new ImagePicker();
-                                final PickedFile? pickedFile =
-                                    await picker.getImage(
-                                        source: ImageSource.gallery,
-                                        imageQuality: 100);
-
-                                if (pickedFile == null) {
-                                  setState(() {});
-                                  return;
-                                }
-                                setState(() {});
-
-                                pathImage = pickedFile.path;
-                                List<int> bytes =
-                                    await new File(pathImage).readAsBytesSync();
-
-                                _imageSend = base64.encode(bytes);
-                                Navigator.of(context).pop();
-
-                                setState(() {});
-                              },
-                              child: Container(
-                                height: Adapt.hp(15),
-                                width: Adapt.wp(15),
-                                child: Image.asset(
-                                    "assets/iconos/drawer/blueGallery.png"),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                final picker = new ImagePicker();
-                                final PickedFile? pickedFile =
-                                    await picker.getImage(
-                                        source: ImageSource.camera,
-                                        imageQuality: 100);
-
-                                if (pickedFile == null) {
-                                  setState(() {});
-
-                                  return;
-                                }
-                                setState(() {});
-                                print("Aqui tenemos esto ${pickedFile.path}");
-                                pathImage = pickedFile.path;
-                                List<int> bytes =
-                                    await new File(pathImage).readAsBytesSync();
-
-                                _imageSend = base64.encode(bytes);
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                height: Adapt.hp(15),
-                                width: Adapt.wp(15),
-                                child: Image.asset(
-                                    "assets/iconos/drawer/Bluecamara.png"),
-                              ),
-                            )
+                            SizedBox(height: Adapt.hp(5)),
+                            SizedBox(height: Adapt.hp(5)),
                           ],
                         ),
-                        SizedBox(height: Adapt.hp(5)),
-                        SizedBox(height: Adapt.hp(5)),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
+          child: CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+            radius: 32.5,
+            child: Text("+",
+                style: TextStyle(
+                  fontSize: 29,
+                  fontStyle: FontStyle.normal,
+                  //fontWeight: FontWeight.w700,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                )),
+          ),
         );
+        ;
       },
-      child: CircleAvatar(
-        backgroundColor: Color.fromARGB(255, 15, 208, 225),
-        radius: 32.5,
-        child: Text("+",
-            style: TextStyle(
-              fontSize: 29,
-              fontStyle: FontStyle.normal,
-              //fontWeight: FontWeight.w700,
-              color: Color.fromARGB(255, 255, 255, 255),
-            )),
-      ),
     );
   }
 
@@ -1282,11 +1333,11 @@ class _Pageppal extends State<Pageppal> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                                color: Color.fromARGB(255, 0, 0, 0),
+                                color: Color.fromARGB(255, 255, 255, 255),
                                 width: 0.5),
                           ),
                           height: Adapt.hp(18),
-                          width: Adapt.wp(58),
+                          width: Adapt.wp(70),
                           child: Center(
                             child: Stack(
                               children: [
@@ -1311,7 +1362,7 @@ class _Pageppal extends State<Pageppal> {
                                   },
                                 ),
                                 Align(
-                                  alignment: Alignment.bottomLeft,
+                                  alignment: Alignment(0.6, 0.5),
                                   child: GestureDetector(
                                     onTap: () {
                                       if (comentario == "" ||
@@ -1344,13 +1395,13 @@ class _Pageppal extends State<Pageppal> {
                                               bottomRight:
                                                   Radius.circular(14))),
                                       child: Container(
-                                        height: Adapt.hp(4),
-                                        width: Adapt.wp(18),
+                                        height: Adapt.hp(2),
+                                        width: Adapt.wp(16),
                                         child: Center(
                                           child: Text(
                                             "Publish",
                                             style: const TextStyle(
-                                                fontSize: 10,
+                                                fontSize: 9,
                                                 fontWeight: FontWeight.w600,
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255)),

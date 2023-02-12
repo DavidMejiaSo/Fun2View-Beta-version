@@ -48,50 +48,40 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _cuerpo(context),
-    );
-  }
-
-  Widget _cuerpo(BuildContext context) {
-    return Stack(
-      children: [_fondo(), _logos(context), _login(context)],
+      body: _accesorios(context),
     );
   }
 
   Widget _login(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: Adapt.hp(70),
-              padding: const EdgeInsets.all(18.0),
-              decoration: BoxDecoration(
-                //color: const Color.fromARGB(178, 15, 15, 15),
-                //border: Border.all(color: Color.fromARGB(255, 248, 247, 247)),
-                borderRadius: BorderRadius.circular(20.0),
-                // boxShadow: [
-                //   BoxShadow(
-                //       color: Colors.grey,
-                //       blurRadius: size.height * 0.003,
-                //       spreadRadius: size.height * 0.001)
-                // ]
-              ),
-              margin: const EdgeInsets.only(top: 220.0),
-              child: _accesorios(context),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: Adapt.hp(80),
+            padding: const EdgeInsets.all(18.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              // boxShadow: [
+              //   BoxShadow(
+              //       color: Colors.grey,
+              //       blurRadius: size.height * 0.003,
+              //       spreadRadius: size.height * 0.001)
+              // ]
             ),
-            // Container(
-            //   margin: EdgeInsets.only(top: 270.0),
-            //   height: size.height * 0.4,
-            //   width: size.width * 0.7,
-            //   child: Card(
-            //     elevation: 10.0,
-            //   ),
-            // ),
-          ],
-        ),
+            margin: const EdgeInsets.only(top: 220.0),
+            child: _accesorios(context),
+          ),
+          // Container(
+          //   margin: EdgeInsets.only(top: 270.0),
+          //   height: size.height * 0.4,
+          //   width: size.width * 0.7,
+          //   child: Card(
+          //     elevation: 10.0,
+          //   ),
+          // ),
+        ],
       ),
     );
   }
@@ -128,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
         //key: formKey,
         child: Column(
           children: [
+            _logos(context),
             Container(
                 child: Text("LOGIN",
                     style: TextStyle(
@@ -405,38 +396,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _logos(BuildContext context) {
-    const spaceBetween = SizedBox(height: 20);
     return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(top: 5.0),
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: Adapt.hp(4),
-              ),
-              Container(
-                height: Adapt.hp(18),
-                width: Adapt.wp(80),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/fun2vie.png"),
-                  ),
+      child: Center(
+        child: Column(
+          children: [
+            Container(
+              height: Adapt.hp(18),
+              width: Adapt.wp(80),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/fun2vie.png"),
                 ),
               ),
-              SizedBox(
-                height: Adapt.hp(5),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  Widget _fondo() {
-    final size = MediaQuery.of(context).size;
-    return Container();
   }
 
   Widget _botonRegistrarse() {

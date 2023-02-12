@@ -323,44 +323,132 @@ class _walletPageState extends State<walletPage> {
     );
   }
 
-  Widget Cuerpo_pantalla() {
-    return GestureDetector(
-      onDoubleTap: () {
-        _key.currentState!.openDrawer();
-      },
-      child: Stack(
+  Widget barraPpalLand() {
+    //Barra para cuando gire
+    return Container(
+      //width: double.infinity,
+      color: Colors.white,
+      child: Column(
         children: [
-          SingleChildScrollView(
-            child: Column(
+          SizedBox(
+            height: Adapt.hp(4),
+          ),
+          Center(
+            child: Row(
               children: [
                 SizedBox(
-                  height: Adapt.hp(10),
+                  width: Adapt.wp(53),
                 ),
-                tittleWallet(),
+                GestureDetector(
+                  onTap: () {
+                    _key.currentState!.openDrawer();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    radius: 15.5,
+                    child: Container(
+                        // color: Colors.red,
+                        height: Adapt.hp(10),
+                        width: Adapt.wp(10),
+                        child: Image.asset("assets/iconos/menu.png")),
+                  ), //COntainer para evitar usar Scaffold
+                ),
                 SizedBox(
-                  height: Adapt.hp(8),
+                  width: Adapt.wp(10),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    color: Color.fromARGB(255, 205, 230, 251),
-                    width: Adapt.wp(90),
-                    child: WalletInfo(),
+                Container(
+                  height: Adapt.hp(6),
+                  width: Adapt.wp(50),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/fun2vie.png"),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: Adapt.hp(10),
+                  width: Adapt.wp(9),
                 ),
-                Center(child: Container())
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (notis == true) {
+                        notis = false;
+                      } else {
+                        notis = true;
+                      }
+                      setState(() {});
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      radius: 18.5,
+                      child: Container(
+                          height: Adapt.hp(6),
+                          width: Adapt.wp(6),
+                          child: Image.asset(
+                              "assets/iconos/drawer/Notificacion.png")),
+                    ),
+                  ),
+                ), //COntainer para evitar usar Scaffold
               ],
             ),
           ),
-          barraPpal(),
-          (notis == true)
-              ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
-              : Container()
         ],
       ),
+    );
+  }
+
+  Widget Cuerpo_pantalla() {
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return GestureDetector(
+          onDoubleTap: () {
+            _key.currentState!.openDrawer();
+          },
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: Adapt.hp(10),
+                    ),
+                    orientation == Orientation.portrait
+                        ? tittleWallet()
+                        : tittleWalletLAND(),
+                    SizedBox(
+                      height: Adapt.hp(8),
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        color: Color.fromARGB(255, 205, 230, 251),
+                        width: Adapt.wp(90),
+                        child: WalletInfo(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: Adapt.hp(10),
+                    ),
+                    Center(child: Container())
+                  ],
+                ),
+              ),
+              Container(
+                  height: Adapt.hp(11),
+                  color: Colors.red,
+                  child: Center(
+                      child: orientation == Orientation.portrait
+                          ? barraPpal()
+                          : barraPpalLand())),
+              (notis == true)
+                  ? Align(
+                      alignment: Alignment(0.70, -0.74), child: NotisLista())
+                  : Container()
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -401,7 +489,7 @@ class _walletPageState extends State<walletPage> {
         Navigator.pop(context);
       },
       child: Container(
-        width: Adapt.wp(95),
+        width: double.infinity,
         color: Color.fromARGB(255, 63, 217, 255),
         child: Row(
           children: [
@@ -423,6 +511,45 @@ class _walletPageState extends State<walletPage> {
             Text(" Wallet",
                 style: TextStyle(
                     fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 255, 255, 255))),
+            SizedBox(
+              width: Adapt.wp(5),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget tittleWalletLAND() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Container(
+        width: double.infinity,
+        color: Color.fromARGB(255, 63, 217, 255),
+        child: Row(
+          children: [
+            SizedBox(
+              width: Adapt.wp(2),
+            ),
+            Container(
+              height: Adapt.hp(8),
+              width: Adapt.wp(8),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/flechaback.png"),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: Adapt.wp(78),
+            ),
+            Text(" Wallet",
+                style: TextStyle(
+                    fontSize: 36,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 255, 255, 255))),
             SizedBox(
