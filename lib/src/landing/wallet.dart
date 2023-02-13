@@ -44,42 +44,122 @@ class _walletPageState extends State<walletPage> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _key,
-        body: Cuerpo_pantalla(),
-        drawer: Drawer(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(70),
-                bottomRight: Radius.circular(400)),
-          ),
-          elevation: 2.5,
-          child: ListView(
-            children: [
-              DrawerHeader(
-                  child: Container(
-                width: double.infinity,
-                child: Column(children: [
-                  CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                      radius: 30.5,
-                      child: CircleAvatar(
-                        backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                        radius: 27.5,
-                        child: Image.network(prefs.coverPhoto),
-                      )),
-                  Text(prefs.usuario,
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 15, 208, 225),
-                        fontSize: 26,
-                        fontWeight: FontWeight.w400,
-                      )),
-                  Text("@User",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 167, 167, 167),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return Scaffold(
+            key: _key,
+            body: RefreshIndicator(
+                color: Color.fromARGB(255, 15, 208, 225),
+                backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                strokeWidth: 4.0,
+                onRefresh: () {
+                  Navigator.pushNamed(context, '/pantallappal');
+                  return Future<void>.delayed(const Duration(seconds: 3));
+                },
+                child: Cuerpo_pantalla()),
+            drawer: Drawer(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(70),
+                    bottomRight: orientation == Orientation.portrait
+                        ? Radius.circular(400)
+                        : Radius.circular(30)),
+              ),
+              elevation: 2.5,
+              child: ListView(
+                children: [
+                  DrawerHeader(
+                      child: Container(
+                    width: double.infinity,
+                    child: Column(children: [
+                      CircleAvatar(
+                          backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                          radius: 30.5,
+                          child: CircleAvatar(
+                              backgroundColor:
+                                  Color.fromARGB(255, 15, 208, 225),
+                              radius: 27.5,
+                              backgroundImage: NetworkImage(prefs.coverPhoto))),
+                      Text(prefs.usuario,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 15, 208, 225),
+                            fontSize: 26,
+                            fontWeight: FontWeight.w400,
+                          )),
+                      Text("@User",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 167, 167, 167),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      SizedBox(
+                        height: Adapt.hp(2),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        height: Adapt.hp(0.2),
+                        width: double.infinity,
+                      )
+                    ]),
+                  )),
+                  ListTile(
+                    leading: Container(
+                      height: Adapt.hp(8),
+                      width: Adapt.wp(8),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/iconos/Homep.png"),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      'My Page',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/pantallappal');
+                    },
+                  ),
+                  ListTile(
+                      leading: Container(
+                        height: Adapt.hp(5),
+                        width: Adapt.wp(5),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/iconos/walletIcon.png"),
+                          ),
+                        ),
+                      ),
+                      title: Text('Wallet'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/walletPage');
+                      }),
+                  ListTile(
+                    leading: Container(
+                      height: Adapt.hp(5),
+                      width: Adapt.wp(5),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              AssetImage("assets/iconos/notificacionIcon.png"),
+                        ),
+                      ),
+                    ),
+                    title: Text('Notification'),
+                    onTap: () {
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (BuildContext context) {
+                      //     return AlertDialogCustom(
+                      //       bodyText: "Estamos Actualizando**",
+                      //       bottonAcept: 'false',
+                      //       bottonCancel: Container(),
+                      //     );
+                      //   },
+                      // );
+                      Navigator.pushNamed(context, '/NotificationPage');
+                    },
+                  ),
                   SizedBox(
                     height: Adapt.hp(2),
                   ),
@@ -87,96 +167,31 @@ class _walletPageState extends State<walletPage> {
                     color: Colors.grey,
                     height: Adapt.hp(0.2),
                     width: double.infinity,
-                  )
-                ]),
-              )),
-              ListTile(
-                leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/Homep.png"),
-                    ),
                   ),
-                ),
-                title: Text(
-                  'My Page',
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/pantallappal');
-                },
-              ),
-              ListTile(
-                  leading: Container(
+                  SizedBox(
                     height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/walletIcon.png"),
+                  ),
+                  ListTile(
+                      leading: Container(
+                        height: Adapt.hp(5),
+                        width: Adapt.wp(5),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image:
+                                AssetImage("assets/iconos/cerrar-sesion.png"),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  title: Text('Wallet', style: TextStyle(color: Colors.blue)),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/walletPage');
-                  }),
-              ListTile(
-                leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/notificacionIcon.png"),
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Notification',
-                ),
-                onTap: () {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialogCustom(
-                  //       bodyText: "Estamos Actualizando**",
-                  //       bottonAcept: 'false',
-                  //       bottonCancel: Container(),
-                  //     );
-                  //   },
-                  // );
-                  Navigator.pushNamed(context, '/NotificationPage');
-                },
+                      title: Text('Logout'),
+                      onTap: () {
+                        Navigator.restorablePushNamed(context, '/login');
+                        prefs.limpiar();
+                      }),
+                ],
               ),
-              SizedBox(
-                height: Adapt.hp(2),
-              ),
-              Container(
-                color: Colors.grey,
-                height: Adapt.hp(0.2),
-                width: double.infinity,
-              ),
-              SizedBox(
-                height: Adapt.hp(5),
-              ),
-              ListTile(
-                  leading: Container(
-                    height: Adapt.hp(5),
-                    width: Adapt.wp(5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/iconos/cerrar-sesion.png"),
-                      ),
-                    ),
-                  ),
-                  title: Text('Logout'),
-                  onTap: () {
-                    Navigator.restorablePushNamed(context, '/login');
-                    prefs.limpiar();
-                  }),
-            ],
-          ),
-        ));
+            ));
+      },
+    );
     ;
   }
 
@@ -413,9 +428,7 @@ class _walletPageState extends State<walletPage> {
                     SizedBox(
                       height: Adapt.hp(10),
                     ),
-                    orientation == Orientation.portrait
-                        ? tittleWallet()
-                        : tittleWalletLAND(),
+                    tittleWallet(),
                     SizedBox(
                       height: Adapt.hp(8),
                     ),
@@ -436,14 +449,19 @@ class _walletPageState extends State<walletPage> {
               ),
               Container(
                   height: Adapt.hp(11),
-                  color: Colors.red,
+                  //color: Colors.red,
                   child: Center(
                       child: orientation == Orientation.portrait
                           ? barraPpal()
                           : barraPpalLand())),
               (notis == true)
-                  ? Align(
-                      alignment: Alignment(0.70, -0.74), child: NotisLista())
+                  ? orientation == Orientation.portrait
+                      ? Align(
+                          alignment: Alignment(0.70, -0.74),
+                          child: NotisLista())
+                      : Align(
+                          alignment: Alignment(0.78, -0.11),
+                          child: NotisLista())
                   : Container()
             ],
           ),
@@ -489,7 +507,7 @@ class _walletPageState extends State<walletPage> {
         Navigator.pop(context);
       },
       child: Container(
-        width: double.infinity,
+        width: Adapt.wp(95),
         color: Color.fromARGB(255, 63, 217, 255),
         child: Row(
           children: [

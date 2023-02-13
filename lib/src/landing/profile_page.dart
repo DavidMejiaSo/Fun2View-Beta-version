@@ -151,7 +151,7 @@ class _WelcomePageState extends State<WelcomePage> {
         child: CircleAvatar(
           backgroundColor: Color.fromARGB(255, 15, 208, 225),
           radius: 65.5,
-          child: Image.network(prefs.coverPhoto),
+          backgroundImage: NetworkImage(prefs.coverPhoto),
         ));
   }
 

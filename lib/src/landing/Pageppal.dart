@@ -111,10 +111,10 @@ class _Pageppal extends State<Pageppal> {
                           backgroundColor: Color.fromARGB(255, 15, 208, 225),
                           radius: 30.5,
                           child: CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                            radius: 27.5,
-                            child: Image.network(prefs.coverPhoto),
-                          )),
+                              backgroundColor:
+                                  Color.fromARGB(255, 15, 208, 225),
+                              radius: 27.5,
+                              backgroundImage: NetworkImage(prefs.coverPhoto))),
                       Text(prefs.usuario,
                           style: TextStyle(
                             color: Color.fromARGB(255, 15, 208, 225),
@@ -232,7 +232,7 @@ class _Pageppal extends State<Pageppal> {
   Widget ImagenesAvatarPortada() {
     return Stack(
       children: [
-        Portadauser(),
+        Center(child: Portadauser()),
         Align(
             alignment: Alignment.center,
             child: Column(
@@ -245,6 +245,10 @@ class _Pageppal extends State<Pageppal> {
             ))
       ],
     );
+  }
+
+  Widget newPublicationII() {
+    return GestureDetector(onTap: () {}, child: Container());
   }
 
   Widget listadoNotis(List items) {
@@ -519,8 +523,12 @@ class _Pageppal extends State<Pageppal> {
                         height: Adapt.hp(3),
                       ),
                       orientation == Orientation.portrait
-                          ? Nameuser()
-                          : Nameuserland(),
+                          ? Container(
+                              width: Adapt.wp(55),
+                              child: Nameuser(),
+                            )
+                          : Container(
+                              width: Adapt.wp(55), child: Nameuserland()),
                       SizedBox(
                         height: Adapt.hp(2),
                       ),
@@ -566,15 +574,23 @@ class _Pageppal extends State<Pageppal> {
             ),
             Container(
                 height: Adapt.hp(12),
-                color: Colors.red,
+                //color: Colors.red,
                 child: Center(
                     child: orientation == Orientation.portrait
                         ? barraPpal()
                         : barraPpalLand())),
             (notis == true)
-                ? Align(alignment: Alignment(0.70, -0.74), child: NotisLista())
+                ? orientation == Orientation.portrait
+                    ? Align(
+                        alignment: Alignment(0.70, -0.74), child: NotisLista())
+                    : Align(
+                        alignment: Alignment(0.78, -0.11), child: NotisLista())
                 : Container(),
-            Align(alignment: Alignment(0.90, 0.95), child: BottomPpal())
+            Align(
+                alignment: Alignment(0.90, 0.95),
+                child: orientation == Orientation.portrait
+                    ? BottomPpal()
+                    : BottomPpalLand())
           ],
         );
       },
@@ -959,21 +975,17 @@ class _Pageppal extends State<Pageppal> {
         ),
       ),
       height: Adapt.hp(30),
-      width: double.infinity,
+      width: Adapt.wp(95),
     );
   }
 
   Widget Avataruser() {
-    return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
-        return CircleAvatar(
-            radius: orientation == Orientation.portrait ? 60.5 : 120.5,
-            child: CircleAvatar(
-              radius: orientation == Orientation.portrait ? 57.5 : 117.5,
-              child: Image.network(prefs.coverPhoto),
-            ));
-      },
-    );
+    return CircleAvatar(
+        radius: 60.5,
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(prefs.coverPhoto),
+          radius: 57.5,
+        ));
   }
 
   Widget AvataruserII() {
@@ -982,8 +994,8 @@ class _Pageppal extends State<Pageppal> {
         radius: 20.5,
         child: CircleAvatar(
           backgroundColor: Color.fromARGB(255, 15, 208, 225),
+          backgroundImage: NetworkImage(prefs.coverPhoto),
           radius: 18.5,
-          child: Image.network(prefs.coverPhoto),
         ));
   }
 
@@ -994,7 +1006,7 @@ class _Pageppal extends State<Pageppal> {
         child: CircleAvatar(
           backgroundColor: Color.fromARGB(255, 15, 208, 225),
           radius: 18.5,
-          child: Image.network(prefs.coverPhoto),
+          backgroundImage: NetworkImage(prefs.coverPhoto),
         ));
   }
 
@@ -1095,6 +1107,116 @@ class _Pageppal extends State<Pageppal> {
                                           await ImageCropper().cropImage(
                                         sourcePath: pickedFile.path,
                                         aspectRatioPresets: [
+                                          CropAspectRatioPreset.ratio7x5,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Fun2View',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      Navigator.of(context).pop();
+                                      setState(() {});
+                                      return;
+                                    }
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/Bluecamara.png"),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: Adapt.hp(5)),
+                            SizedBox(height: Adapt.hp(5)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+            radius: 32.5,
+            child: Text("+",
+                style: TextStyle(
+                  fontSize: 29,
+                  fontStyle: FontStyle.normal,
+                  //fontWeight: FontWeight.w700,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                )),
+          ),
+        );
+        ;
+      },
+    );
+  }
+
+  Widget BottomPpalLand() {
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return GestureDetector(
+          onTap: () async {
+            setState(() {});
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.gallery,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
                                           CropAspectRatioPreset.square,
                                           CropAspectRatioPreset.ratio3x2,
                                           CropAspectRatioPreset.original,
@@ -1104,6 +1226,63 @@ class _Pageppal extends State<Pageppal> {
                                         uiSettings: [
                                           AndroidUiSettings(
                                               toolbarTitle: 'Cropper',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      Navigator.of(context).pop();
+                                      setState(() {});
+                                      return;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/blueGallery.png"),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.camera,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.ratio7x5,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Fun2View',
                                               toolbarColor: Color.fromARGB(
                                                   255, 126, 230, 251),
                                               toolbarWidgetColor: Colors.white,
@@ -1177,14 +1356,18 @@ class _Pageppal extends State<Pageppal> {
       child: CircleAvatar(
           backgroundColor: Colors.white,
           radius: 19.5,
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 18.5,
-            child: Text("X",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                )),
+          child: Center(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 18.5,
+              child: Center(
+                child: Text("x",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+            ),
           )),
     );
   }
@@ -1213,10 +1396,11 @@ class _Pageppal extends State<Pageppal> {
   Widget Nameuser() {
     return Row(
       children: [
-        SizedBox(
-          width: Adapt.wp(25),
-        ),
-        Center(
+        // SizedBox(
+        //   width: Adapt.wp(25),
+        // ),
+        Container(
+          width: Adapt.wp(48),
           child: Text(prefs.usuario,
               style: TextStyle(
                 textBaseline: TextBaseline.ideographic,
@@ -1252,15 +1436,13 @@ class _Pageppal extends State<Pageppal> {
     //User name cuando es horizontal
     return Row(
       children: [
-        SizedBox(
-          width: Adapt.wp(65),
-        ),
-        Center(
+        Container(
+          width: Adapt.wp(48),
           child: Text(prefs.usuario,
               style: TextStyle(
                 textBaseline: TextBaseline.ideographic,
                 color: Color.fromARGB(255, 15, 208, 225),
-                fontSize: 46,
+                fontSize: 36,
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.w700,
               )),
@@ -1316,19 +1498,25 @@ class _Pageppal extends State<Pageppal> {
               bottomRight: Radius.circular(40))),
       elevation: 10.2,
       child: Container(
-        width: Adapt.wp(87),
+        width: Adapt.wp(88),
         child: Column(
           children: [
             Row(
               children: [
-                AvataruserIV(),
+                Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topCenter, child: AvataruserIV()),
+                  ],
+                ),
                 SizedBox(
                   width: Adapt.wp(2),
                 ),
+                SizedBox(height: Adapt.hp(10)),
                 Stack(
                   children: [
                     Padding(
-                        padding: EdgeInsets.all(Adapt.px(10)),
+                        padding: EdgeInsets.all(Adapt.px(12)),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -1477,8 +1665,8 @@ class _Pageppal extends State<Pageppal> {
                   child: CircularProgressIndicator()),
               Center(
                 child: Container(
-                    height: Adapt.hp(30),
-                    width: Adapt.wp(40),
+                    height: Adapt.hp(20),
+                    width: Adapt.wp(60),
                     child: Image.file(File(Picture), fit: BoxFit.cover)),
               ),
             ],

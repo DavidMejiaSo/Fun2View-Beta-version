@@ -113,53 +113,59 @@ class _LoginPageState extends State<LoginPage> {
   Widget _accesorios(BuildContext context) {
     const spaceBetweenWidth = SizedBox(width: 20);
     const spaceBetweenHeight = SizedBox(height: 20);
-    return SingleChildScrollView(
-      child: Form(
-        //key: formKey,
-        child: Column(
-          children: [
-            _logos(context),
-            Container(
-                child: Text("LOGIN",
-                    style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 101, 214, 242)))),
-            SizedBox(height: Adapt.hp(2)),
-            Container(
-                width: Adapt.wp(58),
-                child: Center(
-                  child: Text(
-                      "We help content creators to monetize their content",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 143, 151, 158))),
-                )),
-            SizedBox(
-              height: Adapt.wp(8),
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return SingleChildScrollView(
+          child: Form(
+            //key: formKey,
+            child: Column(
+              children: [
+                _logos(context),
+                Container(
+                    child: Text("LOGIN",
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 101, 214, 242)))),
+                SizedBox(height: Adapt.hp(2)),
+                Container(
+                    width: Adapt.wp(58),
+                    child: Center(
+                      child: Text(
+                          "We help content creators to monetize their content",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 143, 151, 158))),
+                    )),
+                SizedBox(
+                  height: Adapt.wp(8),
+                ),
+                _usuarioText(context),
+                const SizedBox(
+                  height: 40.0,
+                ),
+                _passwordText(context),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                orientation == Orientation.portrait
+                    ? _checkRecordarCredenciales(context)
+                    : _checkRecordarCredencialesLand(context),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                _botonIngresaar(),
+                spaceBetweenHeight,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[],
+                ),
+              ],
             ),
-            _usuarioText(context),
-            const SizedBox(
-              height: 40.0,
-            ),
-            _passwordText(context),
-            const SizedBox(
-              height: 30.0,
-            ),
-            _checkRecordarCredenciales(context),
-            const SizedBox(
-              height: 30.0,
-            ),
-            _botonIngresaar(),
-            spaceBetweenHeight,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[],
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -220,7 +226,52 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       children: [
         SizedBox(
+          width: Adapt.wp(12),
+        ),
+        Container(
           width: Adapt.wp(6),
+          child: Theme(
+            data: ThemeData(
+              unselectedWidgetColor: Color.fromARGB(255, 70, 179, 222),
+            ),
+            child: CheckboxListTile(
+                activeColor: Color.fromARGB(255, 70, 179, 222),
+                checkColor: Color.fromARGB(255, 255, 255, 255),
+                value: _check,
+                onChanged: (valor) {
+                  _check = valor!;
+
+                  if (_check) {
+                    prefs.usuario = _usuario;
+                    prefs.password = _password;
+                    prefs.check = _check;
+                  } else {
+                    prefs.usuario = '';
+                    prefs.password = '';
+                    prefs.check = false;
+                  }
+
+                  setState(() {});
+                }),
+          ),
+        ),
+        SizedBox(
+          width: Adapt.wp(3),
+        ),
+        Text("Acepto Terminos",
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            )),
+      ],
+    );
+  }
+
+  Widget _checkRecordarCredencialesLand(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: Adapt.wp(65),
         ),
         Container(
           width: Adapt.wp(6),

@@ -51,87 +51,164 @@ class _notificationHomeState extends State<notificationHome> {
     }
 
     final size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      key: _key,
-      resizeToAvoidBottomInset: true,
-      body: RefreshIndicator(
-        color: Color.fromARGB(255, 15, 208, 225),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        onRefresh: () {
-          setState(() {});
-          Navigator.pushNamed(context, '/NotificationPage');
-          return Future<void>.delayed(const Duration(seconds: 3));
-        },
-        child: Form(
-          child: Stack(
-            children: [
-              GestureDetector(
-                onDoubleTap: () {
-                  _key.currentState!.openDrawer();
-                },
-                child: SingleChildScrollView(
-                  child: SafeArea(
-                      child: Column(
-                    children: [
-                      SizedBox(
-                        height: Adapt.hp(8),
-                      ),
-                      notificationBack(),
-                      Stack(
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return Scaffold(
+          key: _key,
+          resizeToAvoidBottomInset: true,
+          body: RefreshIndicator(
+            color: Color.fromARGB(255, 15, 208, 225),
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
+            onRefresh: () {
+              setState(() {});
+              Navigator.pushNamed(context, '/NotificationPage');
+              return Future<void>.delayed(const Duration(seconds: 3));
+            },
+            child: Form(
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    onDoubleTap: () {
+                      _key.currentState!.openDrawer();
+                    },
+                    child: SingleChildScrollView(
+                      child: SafeArea(
+                          child: Column(
                         children: [
-                          Column(
+                          SizedBox(
+                            height: Adapt.hp(8),
+                          ),
+                          notificationBack(),
+                          Stack(
                             children: [
-                              SizedBox(height: Adapt.hp(3)),
-                              (UserSimplePreferences.getPets() ?? []).isEmpty
-                                  ? Notisvacias()
-                                  : listadoNotis(
-                                      UserSimplePreferences.getPets() ?? [])
+                              Column(
+                                children: [
+                                  SizedBox(height: Adapt.hp(3)),
+                                  (UserSimplePreferences.getPets() ?? [])
+                                          .isEmpty
+                                      ? Notisvacias()
+                                      : listadoNotis(
+                                          UserSimplePreferences.getPets() ?? [])
+                                ],
+                              )
                             ],
-                          )
+                          ),
                         ],
-                      ),
-                    ],
-                  )),
-                ),
+                      )),
+                    ),
+                  ),
+                  Container(
+                      height: Adapt.hp(12),
+                      // color: Colors.red,
+                      child: Center(
+                          child: orientation == Orientation.portrait
+                              ? barraPpal()
+                              : barraPpalLand()))
+                ],
               ),
-              barraPpal()
-            ],
+            ),
           ),
-        ),
-      ),
-      drawer: Drawer(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(70), bottomRight: Radius.circular(400)),
-        ),
-        elevation: 2.5,
-        child: ListView(
-          children: [
-            DrawerHeader(
-                child: Container(
-              width: double.infinity,
-              child: Column(children: [
-                CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                    radius: 30.5,
-                    child: CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                      radius: 27.5,
-                      child: Image.network(prefs.coverPhoto),
-                    )),
-                Text(prefs.usuario,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 15, 208, 225),
-                      fontSize: 26,
-                      fontWeight: FontWeight.w400,
-                    )),
-                Text("@User",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 167, 167, 167),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    )),
+          drawer: Drawer(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(70),
+                  bottomRight: orientation == Orientation.portrait
+                      ? Radius.circular(400)
+                      : Radius.circular(30)),
+            ),
+            elevation: 2.5,
+            child: ListView(
+              children: [
+                DrawerHeader(
+                    child: Container(
+                  width: double.infinity,
+                  child: Column(children: [
+                    CircleAvatar(
+                        backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                        radius: 30.5,
+                        child: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                            radius: 27.5,
+                            backgroundImage: NetworkImage(prefs.coverPhoto))),
+                    Text(prefs.usuario,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 15, 208, 225),
+                          fontSize: 26,
+                          fontWeight: FontWeight.w400,
+                        )),
+                    Text("@User",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 167, 167, 167),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    SizedBox(
+                      height: Adapt.hp(2),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: Adapt.hp(0.2),
+                      width: double.infinity,
+                    )
+                  ]),
+                )),
+                ListTile(
+                  leading: Container(
+                    height: Adapt.hp(5),
+                    width: Adapt.wp(5),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/iconos/Homep.png"),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    'My Page',
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/pantallappal');
+                  },
+                ),
+                ListTile(
+                    leading: Container(
+                      height: Adapt.hp(5),
+                      width: Adapt.wp(5),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/iconos/walletIcon.png"),
+                        ),
+                      ),
+                    ),
+                    title: Text('Wallet'),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/walletPage');
+                    }),
+                ListTile(
+                  leading: Container(
+                    height: Adapt.hp(5),
+                    width: Adapt.wp(5),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/iconos/notificacionIcon.png"),
+                      ),
+                    ),
+                  ),
+                  title: Text('Notification',
+                      style: TextStyle(color: Colors.blue)),
+                  onTap: () {
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (BuildContext context) {
+                    //     return AlertDialogCustom(
+                    //       bodyText: "Estamos Actualizando**",
+                    //       bottonAcept: 'false',
+                    //       bottonCancel: Container(),
+                    //     );
+                    //   },
+                    // );
+                    Navigator.pushNamed(context, '/NotificationPage');
+                  },
+                ),
                 SizedBox(
                   height: Adapt.hp(2),
                 ),
@@ -139,94 +216,30 @@ class _notificationHomeState extends State<notificationHome> {
                   color: Colors.grey,
                   height: Adapt.hp(0.2),
                   width: double.infinity,
-                )
-              ]),
-            )),
-            ListTile(
-              leading: Container(
-                height: Adapt.hp(5),
-                width: Adapt.wp(5),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/iconos/Homep.png"),
-                  ),
                 ),
-              ),
-              title: Text(
-                'My Page',
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/pantallappal');
-              },
-            ),
-            ListTile(
-                leading: Container(
+                SizedBox(
                   height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/walletIcon.png"),
+                ),
+                ListTile(
+                    leading: Container(
+                      height: Adapt.hp(5),
+                      width: Adapt.wp(5),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/iconos/cerrar-sesion.png"),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                title: Text('Wallet'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/walletPage');
-                }),
-            ListTile(
-              leading: Container(
-                height: Adapt.hp(5),
-                width: Adapt.wp(5),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/iconos/notificacionIcon.png"),
-                  ),
-                ),
-              ),
-              title: Text('Notification', style: TextStyle(color: Colors.blue)),
-              onTap: () {
-                // showDialog(
-                //   context: context,
-                //   builder: (BuildContext context) {
-                //     return AlertDialogCustom(
-                //       bodyText: "Estamos Actualizando**",
-                //       bottonAcept: 'false',
-                //       bottonCancel: Container(),
-                //     );
-                //   },
-                // );
-                Navigator.pushNamed(context, '/NotificationPage');
-              },
+                    title: Text('Logout'),
+                    onTap: () {
+                      Navigator.restorablePushNamed(context, '/login');
+                      prefs.limpiar();
+                    }),
+              ],
             ),
-            SizedBox(
-              height: Adapt.hp(2),
-            ),
-            Container(
-              color: Colors.grey,
-              height: Adapt.hp(0.2),
-              width: double.infinity,
-            ),
-            SizedBox(
-              height: Adapt.hp(5),
-            ),
-            ListTile(
-                leading: Container(
-                  height: Adapt.hp(5),
-                  width: Adapt.wp(5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/iconos/cerrar-sesion.png"),
-                    ),
-                  ),
-                ),
-                title: Text('Logout'),
-                onTap: () {
-                  Navigator.restorablePushNamed(context, '/login');
-                  prefs.limpiar();
-                }),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -265,6 +278,60 @@ class _notificationHomeState extends State<notificationHome> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget barraPpalLand() {
+    //Barra para cuando gire
+    return Container(
+      //width: double.infinity,
+      color: Colors.white,
+      child: Column(
+        children: [
+          SizedBox(
+            height: Adapt.hp(4),
+          ),
+          Center(
+            child: Row(
+              children: [
+                SizedBox(
+                  width: Adapt.wp(53),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _key.currentState!.openDrawer();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    radius: 15.5,
+                    child: Container(
+                        // color: Colors.red,
+                        height: Adapt.hp(10),
+                        width: Adapt.wp(10),
+                        child: Image.asset("assets/iconos/menu.png")),
+                  ), //COntainer para evitar usar Scaffold
+                ),
+                SizedBox(
+                  width: Adapt.wp(10),
+                ),
+                Container(
+                  height: Adapt.hp(6),
+                  width: Adapt.wp(50),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/fun2vie.png"),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: Adapt.wp(9),
+                ),
+                //COntainer para evitar usar Scaffold
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
