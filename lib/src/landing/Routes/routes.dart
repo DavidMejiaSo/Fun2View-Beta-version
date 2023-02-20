@@ -43,7 +43,9 @@ class _RoutesState extends State<Routes> {
 
       debugShowCheckedModeBanner: false,
 
-      initialRoute: '/pantallaCarga',
+      initialRoute: PreferenciasUsuario().token == ""
+          ? '/pantallaCarga'
+          : '/home', //'/pantallaCarga',
       // PreferenciasUsuario().token == "" ? '/home' : '/pantallaCarga',
       routes: {
         '/login': (context) => const LoginPage(),

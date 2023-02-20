@@ -46,6 +46,7 @@ class _notificationHomeState extends State<notificationHome> {
     @override
     void initState() {
       descripcionNotificacion = UserSimplePreferences.getPets() ?? [];
+      prefs.iniciarPreferencias();
 
       super.initState();
     }

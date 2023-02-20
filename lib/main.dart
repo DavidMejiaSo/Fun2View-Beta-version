@@ -18,7 +18,7 @@ void main() async {
   await UserSimplePreferences.init();
   await prefs.iniciarPreferencias();
   await NotificationService().initNotification;
-  prefs.token = " ";
+  //prefs.token = " ";
 
   runApp(MyApp());
 }

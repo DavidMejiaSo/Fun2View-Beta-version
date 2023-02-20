@@ -22,6 +22,15 @@ class _WelcomePageState extends State<WelcomePage> {
       primary: Color.fromARGB(255, 101, 214, 242),
       textStyle: const TextStyle(
           fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black));
+
+  @override
+  void initState() {
+    print("Sucede que aquí esta el token de la app");
+    print(PreferenciasUsuario().token);
+    prefs.iniciarPreferencias();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return (Scaffold(
@@ -142,6 +151,27 @@ class _WelcomePageState extends State<WelcomePage> {
         width: Adapt.wp(90),
       ),
     );
+  }
+
+  void getUserData() async {
+    final getDataUser = GetUserInfoService();
+    Map respuesta = await getDataUser.getInfo();
+
+    String? token = "";
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+    });
+    //respuesta["idTelefono"] = token;
+    if (respuesta["idTelefono"] == "") {
+      print("Está vacío mi reeeey");
+      //changeInfoUser.changeInfo("idTelefono", token);
+      //changeInfoUser.act)ualizarUser(respuesta);
+    } else if (respuesta["idTelefono"] != token) {
+      print("Es diferente de TOKEN PAI");
+      //changeInfoUser.changeInfo("idTelefono", token);
+    }
+    https: //DavidMej:ATBBY7eSB5qwBuHwwEPKfrSZ6QgU885678AA@bitbucket.org/intel2saverd/fun2view-app.git
+    setState(() {});
   }
 
   Widget profilePhoto() {

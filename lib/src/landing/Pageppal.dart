@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fun2view_appli/Responsive/Adapt.dart';
 import 'package:fun2view_appli/src/host.dart';
 import 'package:fun2view_appli/src/landing/profile_page.dart';
@@ -68,6 +69,7 @@ class _Pageppal extends State<Pageppal> {
   @override
   void initState() {
     Cuerpo_pantalla();
+    prefs.iniciarPreferencias();
     super.initState();
     // _check = prefs.check;
     // _usuario = prefs.usuario;
@@ -77,155 +79,182 @@ class _Pageppal extends State<Pageppal> {
     setState(() {});
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pushNamed(
+                    context, '/pantallappal'), //<-- SEE HERE
+                child: new Text('No'),
+              ),
+              TextButton(
+                onPressed: () => SystemChannels.platform
+                    .invokeMethod('SystemNavigator.pop'), // <-- SEE HERE
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
-        return Scaffold(
-            key: _key,
-            body: RefreshIndicator(
-                color: Color.fromARGB(255, 15, 208, 225),
-                backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                strokeWidth: 4.0,
-                onRefresh: () {
-                  Navigator.pushNamed(context, '/pantallappal');
-                  return Future<void>.delayed(const Duration(seconds: 3));
-                },
-                child: Cuerpo_pantalla()),
-            drawer: Drawer(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(70),
-                    bottomRight: orientation == Orientation.portrait
-                        ? Radius.circular(400)
-                        : Radius.circular(30)),
-              ),
-              elevation: 2.5,
-              child: ListView(
-                children: [
-                  DrawerHeader(
-                      child: Container(
-                    width: double.infinity,
-                    child: Column(children: [
-                      CircleAvatar(
-                          backgroundColor: Color.fromARGB(255, 15, 208, 225),
-                          radius: 30.5,
-                          child: CircleAvatar(
-                              backgroundColor:
-                                  Color.fromARGB(255, 15, 208, 225),
-                              radius: 27.5,
-                              backgroundImage: NetworkImage(prefs.coverPhoto))),
-                      Text(prefs.usuario,
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 15, 208, 225),
-                            fontSize: 26,
-                            fontWeight: FontWeight.w400,
-                          )),
-                      Text("@User",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 167, 167, 167),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      SizedBox(
-                        height: Adapt.hp(2),
-                      ),
-                      Container(
-                        color: Colors.grey,
-                        height: Adapt.hp(0.2),
-                        width: double.infinity,
-                      )
-                    ]),
-                  )),
-                  ListTile(
-                    leading: Container(
-                      height: Adapt.hp(8),
-                      width: Adapt.wp(8),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/iconos/Homep.png"),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: OrientationBuilder(
+        builder: (BuildContext context, Orientation orientation) {
+          return Scaffold(
+              key: _key,
+              body: RefreshIndicator(
+                  color: Color.fromARGB(255, 15, 208, 225),
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                  strokeWidth: 4.0,
+                  onRefresh: () {
+                    Navigator.pushNamed(context, '/pantallappal');
+                    return Future<void>.delayed(const Duration(seconds: 3));
+                  },
+                  child: Cuerpo_pantalla()),
+              drawer: Drawer(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(70),
+                      bottomRight: orientation == Orientation.portrait
+                          ? Radius.circular(400)
+                          : Radius.circular(30)),
+                ),
+                elevation: 2.5,
+                child: ListView(
+                  children: [
+                    DrawerHeader(
+                        child: Container(
+                      width: double.infinity,
+                      child: Column(children: [
+                        CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                            radius: 30.5,
+                            child: CircleAvatar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 15, 208, 225),
+                                radius: 27.5,
+                                backgroundImage:
+                                    NetworkImage(prefs.coverPhoto))),
+                        Text(prefs.usuario,
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 15, 208, 225),
+                              fontSize: 26,
+                              fontWeight: FontWeight.w400,
+                            )),
+                        Text("@User",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 167, 167, 167),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        SizedBox(
+                          height: Adapt.hp(2),
+                        ),
+                        Container(
+                          color: Colors.grey,
+                          height: Adapt.hp(0.2),
+                          width: double.infinity,
+                        )
+                      ]),
+                    )),
+                    ListTile(
+                      leading: Container(
+                        height: Adapt.hp(8),
+                        width: Adapt.wp(8),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/iconos/Homep.png"),
+                          ),
                         ),
                       ),
+                      title: Text(
+                        'My Page',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/pantallappal');
+                      },
                     ),
-                    title: Text(
-                      'My Page',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/pantallappal');
-                    },
-                  ),
-                  ListTile(
+                    ListTile(
+                        leading: Container(
+                          height: Adapt.hp(5),
+                          width: Adapt.wp(5),
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("assets/iconos/walletIcon.png"),
+                            ),
+                          ),
+                        ),
+                        title: Text('Wallet'),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/walletPage');
+                        }),
+                    ListTile(
                       leading: Container(
                         height: Adapt.hp(5),
                         width: Adapt.wp(5),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage("assets/iconos/walletIcon.png"),
+                            image: AssetImage(
+                                "assets/iconos/notificacionIcon.png"),
                           ),
                         ),
                       ),
-                      title: Text('Wallet'),
+                      title: Text('Notification'),
                       onTap: () {
-                        Navigator.pushNamed(context, '/walletPage');
-                      }),
-                  ListTile(
-                    leading: Container(
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return AlertDialogCustom(
+                        //       bodyText: "Estamos Actualizando**",
+                        //       bottonAcept: 'false',
+                        //       bottonCancel: Container(),
+                        //     );
+                        //   },
+                        // );
+                        Navigator.pushNamed(context, '/NotificationPage');
+                      },
+                    ),
+                    SizedBox(
+                      height: Adapt.hp(2),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: Adapt.hp(0.2),
+                      width: double.infinity,
+                    ),
+                    SizedBox(
                       height: Adapt.hp(5),
-                      width: Adapt.wp(5),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              AssetImage("assets/iconos/notificacionIcon.png"),
-                        ),
-                      ),
                     ),
-                    title: Text('Notification'),
-                    onTap: () {
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return AlertDialogCustom(
-                      //       bodyText: "Estamos Actualizando**",
-                      //       bottonAcept: 'false',
-                      //       bottonCancel: Container(),
-                      //     );
-                      //   },
-                      // );
-                      Navigator.pushNamed(context, '/NotificationPage');
-                    },
-                  ),
-                  SizedBox(
-                    height: Adapt.hp(2),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: Adapt.hp(0.2),
-                    width: double.infinity,
-                  ),
-                  SizedBox(
-                    height: Adapt.hp(5),
-                  ),
-                  ListTile(
-                      leading: Container(
-                        height: Adapt.hp(5),
-                        width: Adapt.wp(5),
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                                AssetImage("assets/iconos/cerrar-sesion.png"),
+                    ListTile(
+                        leading: Container(
+                          height: Adapt.hp(5),
+                          width: Adapt.wp(5),
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  AssetImage("assets/iconos/cerrar-sesion.png"),
+                            ),
                           ),
                         ),
-                      ),
-                      title: Text('Logout'),
-                      onTap: () {
-                        Navigator.restorablePushNamed(context, '/login');
-                        prefs.limpiar();
-                      }),
-                ],
-              ),
-            ));
-      },
+                        title: Text('Logout'),
+                        onTap: () {
+                          Navigator.restorablePushNamed(context, '/login');
+                          prefs.limpiar();
+                        }),
+                  ],
+                ),
+              ));
+        },
+      ),
     );
   }
 
@@ -559,7 +588,7 @@ class _Pageppal extends State<Pageppal> {
                       SizedBox(
                         height: Adapt.hp(8),
                       ),
-                      newPublication(),
+                      newPublication(), //tapPublish(), //
                       SizedBox(
                         height: Adapt.hp(2),
                       ),
@@ -785,6 +814,7 @@ class _Pageppal extends State<Pageppal> {
         future: Myposts_service().myPost(prefs.token),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            print(prefs.token);
             return SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Container(
@@ -979,512 +1009,397 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
-  Widget Avataruser() {
-    return CircleAvatar(
-        radius: 60.5,
-        child: CircleAvatar(
-          backgroundImage: NetworkImage(prefs.coverPhoto),
-          radius: 57.5,
-        ));
-  }
+  Widget newPublication2() {
+    return SingleChildScrollView(
+      child: Container(
+        //color: Colors.transparent,
+        height: pathImage == "" ? Adapt.hp(60) : Adapt.hp(68),
+        //width: Adapt.wp(95),
+        child: Center(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: Adapt.wp(10),
+                  ),
+                  Text("New Publication",
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 89, 225, 255))),
+                  SizedBox(
+                    width: Adapt.wp(3),
+                  ),
+                  CerrarPubli()
+                ],
+              ),
+              SizedBox(
+                height: Adapt.hp(6),
+              ),
+              Row(
+                children: [
+                  CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                      radius: 20.5,
+                      child: CircleAvatar(
+                        backgroundColor: Color.fromARGB(255, 15, 208, 225),
+                        radius: 18.5,
+                        backgroundImage: NetworkImage(prefs.coverPhoto),
+                      )),
+                  SizedBox(
+                    width: Adapt.wp(2),
+                  ),
+                  Column(
+                    children: [
+                      Text(prefs.usuario,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          )),
+                      Text(DateFormat('MMMM dd, yyyy').format(DateTime.now()),
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 136, 134, 134),
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ))
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: Adapt.hp(2),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: Color.fromARGB(255, 255, 255, 255), width: 0.5),
+                ),
+                //height: Adapt.hp(30),
+                width: Adapt.wp(85),
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  style: TextStyle(
+                      fontSize: Adapt.px(24),
+                      color: Color.fromARGB(255, 255, 255, 255)),
+                  maxLines: 3,
+                  maxLength: 100,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "New post...",
+                    hintStyle: TextStyle(
+                        fontSize: Adapt.px(20),
+                        color: Color.fromARGB(255, 99, 99, 99)),
+                  ),
+                  onChanged: (String value) {
+                    setState(() {
+                      comentario = value;
+                    });
+                  },
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {});
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {});
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                          height: Adapt.hp(35),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final picker = new ImagePicker();
+                                            final PickedFile? pickedFile =
+                                                await picker.getImage(
+                                                    source: ImageSource.gallery,
+                                                    imageQuality: 100);
 
-  Widget AvataruserII() {
-    return CircleAvatar(
-        backgroundColor: Color.fromARGB(255, 15, 208, 225),
-        radius: 20.5,
-        child: CircleAvatar(
-          backgroundColor: Color.fromARGB(255, 15, 208, 225),
-          backgroundImage: NetworkImage(prefs.coverPhoto),
-          radius: 18.5,
-        ));
-  }
-
-  Widget AvataruserIV() {
-    return CircleAvatar(
-        backgroundColor: Color.fromARGB(255, 15, 208, 225),
-        radius: 20.5,
-        child: CircleAvatar(
-          backgroundColor: Color.fromARGB(255, 15, 208, 225),
-          radius: 18.5,
-          backgroundImage: NetworkImage(prefs.coverPhoto),
-        ));
-  }
-
-  Widget BottomPpal() {
-    return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
-        return GestureDetector(
-          onTap: () async {
-            setState(() {});
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Align(
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    },
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Column(
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: Adapt.hp(35),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    final picker = new ImagePicker();
-                                    final PickedFile? pickedFile =
-                                        await picker.getImage(
-                                            source: ImageSource.gallery,
-                                            imageQuality: 100);
-
-                                    if (pickedFile != null) {
-                                      final CroppedFile? croppedFile =
-                                          await ImageCropper().cropImage(
-                                        sourcePath: pickedFile.path,
-                                        aspectRatioPresets: [
-                                          CropAspectRatioPreset.square,
-                                          CropAspectRatioPreset.ratio3x2,
-                                          CropAspectRatioPreset.original,
-                                          CropAspectRatioPreset.ratio4x3,
-                                          CropAspectRatioPreset.ratio16x9
-                                        ],
-                                        uiSettings: [
-                                          AndroidUiSettings(
-                                              toolbarTitle: 'Cropper',
-                                              toolbarColor: Color.fromARGB(
-                                                  255, 126, 230, 251),
-                                              toolbarWidgetColor: Colors.white,
-                                              initAspectRatio:
+                                            if (pickedFile != null) {
+                                              final CroppedFile? croppedFile =
+                                                  await ImageCropper()
+                                                      .cropImage(
+                                                sourcePath: pickedFile.path,
+                                                aspectRatioPresets: [
+                                                  CropAspectRatioPreset.square,
+                                                  CropAspectRatioPreset
+                                                      .ratio3x2,
                                                   CropAspectRatioPreset
                                                       .original,
-                                              lockAspectRatio: false),
-                                          IOSUiSettings(
-                                            title: 'Cropper',
-                                          ),
-                                          WebUiSettings(
-                                            context: context,
-                                          ),
-                                        ],
-                                      );
+                                                  CropAspectRatioPreset
+                                                      .ratio4x3,
+                                                  CropAspectRatioPreset
+                                                      .ratio16x9
+                                                ],
+                                                uiSettings: [
+                                                  AndroidUiSettings(
+                                                      toolbarTitle: 'Cropper',
+                                                      toolbarColor:
+                                                          Color.fromARGB(255,
+                                                              126, 230, 251),
+                                                      toolbarWidgetColor:
+                                                          Colors.white,
+                                                      initAspectRatio:
+                                                          CropAspectRatioPreset
+                                                              .original,
+                                                      lockAspectRatio: false),
+                                                  IOSUiSettings(
+                                                    title: 'Cropper',
+                                                  ),
+                                                  WebUiSettings(
+                                                    context: context,
+                                                  ),
+                                                ],
+                                              );
 
-                                      pathImage = croppedFile!.path;
-                                      List<int> bytes =
-                                          await new File(pathImage)
-                                              .readAsBytesSync();
-//
-                                      _imageSend = base64.encode(bytes);
-                                      Navigator.of(context).pop();
-                                      setState(() {});
-                                      return;
-                                    }
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    height: Adapt.hp(15),
-                                    width: Adapt.wp(15),
-                                    child: Image.asset(
-                                        "assets/iconos/drawer/blueGallery.png"),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    final picker = new ImagePicker();
-                                    final PickedFile? pickedFile =
-                                        await picker.getImage(
-                                            source: ImageSource.camera,
-                                            imageQuality: 100);
+                                              pathImage = croppedFile!.path;
+                                              List<int> bytes =
+                                                  await new File(pathImage)
+                                                      .readAsBytesSync();
+                                              //
+                                              _imageSend = base64.encode(bytes);
+                                              Navigator.of(context).pop();
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(content:
+                                                        StatefulBuilder(
+                                                      builder:
+                                                          (context, setState) {
+                                                        return newPublication2();
+                                                      },
+                                                    ));
+                                                    //title: newPublication2());
+                                                  });
+                                              setState(() {});
+                                              return;
+                                            }
+                                            setState(() {
+                                              newPublication2();
+                                            });
+                                          },
+                                          child: Container(
+                                            height: Adapt.hp(15),
+                                            width: Adapt.wp(15),
+                                            child: Image.asset(
+                                                "assets/iconos/drawer/blueGallery.png"),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final picker = new ImagePicker();
+                                            final PickedFile? pickedFile =
+                                                await picker.getImage(
+                                                    source: ImageSource.camera,
+                                                    imageQuality: 100);
 
-                                    if (pickedFile != null) {
-                                      final CroppedFile? croppedFile =
-                                          await ImageCropper().cropImage(
-                                        sourcePath: pickedFile.path,
-                                        aspectRatioPresets: [
-                                          CropAspectRatioPreset.ratio7x5,
-                                          CropAspectRatioPreset.ratio3x2,
-                                          CropAspectRatioPreset.original,
-                                          CropAspectRatioPreset.ratio4x3,
-                                          CropAspectRatioPreset.ratio16x9
-                                        ],
-                                        uiSettings: [
-                                          AndroidUiSettings(
-                                              toolbarTitle: 'Fun2View',
-                                              toolbarColor: Color.fromARGB(
-                                                  255, 126, 230, 251),
-                                              toolbarWidgetColor: Colors.white,
-                                              initAspectRatio:
+                                            if (pickedFile != null) {
+                                              final CroppedFile? croppedFile =
+                                                  await ImageCropper()
+                                                      .cropImage(
+                                                sourcePath: pickedFile.path,
+                                                aspectRatioPresets: [
+                                                  CropAspectRatioPreset
+                                                      .ratio7x5,
+                                                  CropAspectRatioPreset
+                                                      .ratio3x2,
                                                   CropAspectRatioPreset
                                                       .original,
-                                              lockAspectRatio: false),
-                                          IOSUiSettings(
-                                            title: 'Cropper',
-                                          ),
-                                          WebUiSettings(
-                                            context: context,
-                                          ),
-                                        ],
-                                      );
+                                                  CropAspectRatioPreset
+                                                      .ratio4x3,
+                                                  CropAspectRatioPreset
+                                                      .ratio16x9
+                                                ],
+                                                uiSettings: [
+                                                  AndroidUiSettings(
+                                                      toolbarTitle: 'Fun2View',
+                                                      toolbarColor:
+                                                          Color.fromARGB(255,
+                                                              126, 230, 251),
+                                                      toolbarWidgetColor:
+                                                          Colors.white,
+                                                      initAspectRatio:
+                                                          CropAspectRatioPreset
+                                                              .original,
+                                                      lockAspectRatio: false),
+                                                  IOSUiSettings(
+                                                    title: 'Cropper',
+                                                  ),
+                                                  WebUiSettings(
+                                                    context: context,
+                                                  ),
+                                                ],
+                                              );
 
-                                      pathImage = croppedFile!.path;
-                                      List<int> bytes =
-                                          await new File(pathImage)
-                                              .readAsBytesSync();
-//
-                                      _imageSend = base64.encode(bytes);
-                                      Navigator.of(context).pop();
-                                      setState(() {});
-                                      return;
-                                    }
-                                  },
-                                  child: Container(
-                                    height: Adapt.hp(15),
-                                    width: Adapt.wp(15),
-                                    child: Image.asset(
-                                        "assets/iconos/drawer/Bluecamara.png"),
-                                  ),
-                                )
-                              ],
+                                              pathImage = croppedFile!.path;
+                                              List<int> bytes =
+                                                  await new File(pathImage)
+                                                      .readAsBytesSync();
+                                              //
+                                              _imageSend = base64.encode(bytes);
+                                              Navigator.of(context).pop();
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(content:
+                                                        StatefulBuilder(
+                                                      builder:
+                                                          (context, setState) {
+                                                        return newPublication2();
+                                                      },
+                                                    ));
+                                                    //title: newPublication2());
+                                                  });
+                                              setState(() {
+                                                newPublication2();
+                                              });
+                                              return;
+                                            }
+                                          },
+                                          child: Container(
+                                            height: Adapt.hp(15),
+                                            width: Adapt.wp(15),
+                                            child: Image.asset(
+                                                "assets/iconos/drawer/Bluecamara.png"),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: Adapt.hp(5)),
+                                    SizedBox(height: Adapt.hp(5)),
+                                  ],
+                                ),
+                              ),
                             ),
-                            SizedBox(height: Adapt.hp(5)),
-                            SizedBox(height: Adapt.hp(5)),
-                          ],
-                        ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: Adapt.hp(8),
+                    width: Adapt.wp(8),
+                    child: Image.asset("assets/iconos/drawer/blueGallery.png"),
+                  ),
+                ),
+              ),
+              (pathImage != "")
+                  ? Stack(
+                      children: [
+                        Container(
+                            height: Adapt.hp(20),
+                            width: Adapt.wp(60),
+                            child: mostrarImagen(pathImage)),
+                        Align(child: Cerrar())
+                      ],
+                    )
+                  : Container(),
+              GestureDetector(
+                onTap: () {
+                  if (comentario == "" || comentario == null) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialogCustom(
+                            bodyText: "Recuerda publicar un comentario",
+                            bottonAcept: 'false',
+                            bottonCancel: Container(),
+                          );
+                        });
+                  } else {
+                    _enviarPost();
+                    Navigator.pushReplacementNamed(context, '/pantallappal');
+                    setState(() {});
+                  }
+                },
+                child: Card(
+                  color: Color.fromARGB(255, 88, 175, 246),
+                  elevation: 10.2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14),
+                          topRight: Radius.circular(14),
+                          bottomLeft: Radius.circular(14),
+                          bottomRight: Radius.circular(14))),
+                  child: Container(
+                    height: Adapt.hp(3),
+                    width: Adapt.wp(46),
+                    child: Center(
+                      child: Text(
+                        "Publish",
+                        style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 255, 255, 255)),
                       ),
                     ),
                   ),
-                );
-              },
-            );
-          },
-          child: CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 15, 208, 225),
-            radius: 32.5,
-            child: Text("+",
-                style: TextStyle(
-                  fontSize: 29,
-                  fontStyle: FontStyle.normal,
-                  //fontWeight: FontWeight.w700,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                )),
+                ),
+              ),
+            ],
           ),
-        );
-        ;
-      },
+        ),
+      ),
     );
   }
 
-  Widget BottomPpalLand() {
-    return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
-        return GestureDetector(
-          onTap: () async {
-            setState(() {});
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Align(
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    },
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Column(
-                          children: [
-                            Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    final picker = new ImagePicker();
-                                    final PickedFile? pickedFile =
-                                        await picker.getImage(
-                                            source: ImageSource.gallery,
-                                            imageQuality: 100);
-
-                                    if (pickedFile != null) {
-                                      final CroppedFile? croppedFile =
-                                          await ImageCropper().cropImage(
-                                        sourcePath: pickedFile.path,
-                                        aspectRatioPresets: [
-                                          CropAspectRatioPreset.square,
-                                          CropAspectRatioPreset.ratio3x2,
-                                          CropAspectRatioPreset.original,
-                                          CropAspectRatioPreset.ratio4x3,
-                                          CropAspectRatioPreset.ratio16x9
-                                        ],
-                                        uiSettings: [
-                                          AndroidUiSettings(
-                                              toolbarTitle: 'Cropper',
-                                              toolbarColor: Color.fromARGB(
-                                                  255, 126, 230, 251),
-                                              toolbarWidgetColor: Colors.white,
-                                              initAspectRatio:
-                                                  CropAspectRatioPreset
-                                                      .original,
-                                              lockAspectRatio: false),
-                                          IOSUiSettings(
-                                            title: 'Cropper',
-                                          ),
-                                          WebUiSettings(
-                                            context: context,
-                                          ),
-                                        ],
-                                      );
-
-                                      pathImage = croppedFile!.path;
-                                      List<int> bytes =
-                                          await new File(pathImage)
-                                              .readAsBytesSync();
-//
-                                      _imageSend = base64.encode(bytes);
-                                      Navigator.of(context).pop();
-                                      setState(() {});
-                                      return;
-                                    }
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    height: Adapt.hp(15),
-                                    width: Adapt.wp(15),
-                                    child: Image.asset(
-                                        "assets/iconos/drawer/blueGallery.png"),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    final picker = new ImagePicker();
-                                    final PickedFile? pickedFile =
-                                        await picker.getImage(
-                                            source: ImageSource.camera,
-                                            imageQuality: 100);
-
-                                    if (pickedFile != null) {
-                                      final CroppedFile? croppedFile =
-                                          await ImageCropper().cropImage(
-                                        sourcePath: pickedFile.path,
-                                        aspectRatioPresets: [
-                                          CropAspectRatioPreset.ratio7x5,
-                                          CropAspectRatioPreset.ratio3x2,
-                                          CropAspectRatioPreset.original,
-                                          CropAspectRatioPreset.ratio4x3,
-                                          CropAspectRatioPreset.ratio16x9
-                                        ],
-                                        uiSettings: [
-                                          AndroidUiSettings(
-                                              toolbarTitle: 'Fun2View',
-                                              toolbarColor: Color.fromARGB(
-                                                  255, 126, 230, 251),
-                                              toolbarWidgetColor: Colors.white,
-                                              initAspectRatio:
-                                                  CropAspectRatioPreset
-                                                      .original,
-                                              lockAspectRatio: false),
-                                          IOSUiSettings(
-                                            title: 'Cropper',
-                                          ),
-                                          WebUiSettings(
-                                            context: context,
-                                          ),
-                                        ],
-                                      );
-
-                                      pathImage = croppedFile!.path;
-                                      List<int> bytes =
-                                          await new File(pathImage)
-                                              .readAsBytesSync();
-//
-                                      _imageSend = base64.encode(bytes);
-                                      Navigator.of(context).pop();
-                                      setState(() {});
-                                      return;
-                                    }
-                                  },
-                                  child: Container(
-                                    height: Adapt.hp(15),
-                                    width: Adapt.wp(15),
-                                    child: Image.asset(
-                                        "assets/iconos/drawer/Bluecamara.png"),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: Adapt.hp(5)),
-                            SizedBox(height: Adapt.hp(5)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          child: CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 15, 208, 225),
-            radius: 32.5,
-            child: Text("+",
-                style: TextStyle(
-                  fontSize: 29,
-                  fontStyle: FontStyle.normal,
-                  //fontWeight: FontWeight.w700,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                )),
-          ),
-        );
-        ;
-      },
-    );
-  }
-
-  Widget Cerrar() {
+  Widget tapPublish() {
     return GestureDetector(
       onTap: () {
-        pathImage = "";
-        setState(() {});
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(content: StatefulBuilder(
+                  builder: (context, setState) {
+                    return newPublication2();
+                  },
+                ));
+                //title: newPublication2());
+              });
+        });
       },
-      child: CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 19.5,
-          child: Center(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 18.5,
-              child: Center(
-                child: Text("x",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    )),
+      child: Container(
+        child: Row(
+          children: [
+            AvataruserIV(),
+            Container(
+              height: Adapt.hp(10),
+              width: Adapt.wp(55),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    color: Color.fromARGB(255, 59, 59, 59), width: 0.5),
               ),
             ),
-          )),
+          ],
+        ),
+        height: Adapt.hp(10),
+        width: Adapt.wp(95),
+        //color: Colors.red,
+      ),
     );
-  }
-
-  void getUserData() async {
-    final getDataUser = GetUserInfoService();
-    Map respuesta = await getDataUser.getInfo();
-
-    String? token = "";
-    await FirebaseMessaging.instance.getToken().then((value) {
-      token = value;
-    });
-    //respuesta["idTelefono"] = token;
-    if (respuesta["idTelefono"] == "") {
-      print("Está vacío mi reeeey");
-      //changeInfoUser.changeInfo("idTelefono", token);
-      //changeInfoUser.act)ualizarUser(respuesta);
-    } else if (respuesta["idTelefono"] != token) {
-      print("Es diferente de TOKEN PAI");
-      //changeInfoUser.changeInfo("idTelefono", token);
-    }
-    https: //DavidMej:ATBBY7eSB5qwBuHwwEPKfrSZ6QgU885678AA@bitbucket.org/intel2saverd/fun2view-app.git
-    setState(() {});
-  }
-
-  Widget Nameuser() {
-    return Row(
-      children: [
-        // SizedBox(
-        //   width: Adapt.wp(25),
-        // ),
-        Container(
-          width: Adapt.wp(48),
-          child: Text(prefs.usuario,
-              style: TextStyle(
-                textBaseline: TextBaseline.ideographic,
-                color: Color.fromARGB(255, 15, 208, 225),
-                fontSize: 36,
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w700,
-              )),
-        ),
-        SizedBox(
-          width: Adapt.wp(2),
-        ),
-        GestureDetector(
-          onTap: () async {
-            await Share.share(
-                "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
-          },
-          child: Container(
-            height: Adapt.hp(10),
-            width: Adapt.wp(5),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/iconos/share.png"),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget Nameuserland() {
-    //User name cuando es horizontal
-    return Row(
-      children: [
-        Container(
-          width: Adapt.wp(48),
-          child: Text(prefs.usuario,
-              style: TextStyle(
-                textBaseline: TextBaseline.ideographic,
-                color: Color.fromARGB(255, 15, 208, 225),
-                fontSize: 36,
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w700,
-              )),
-        ),
-        SizedBox(
-          width: Adapt.wp(2),
-        ),
-        GestureDetector(
-          onTap: () async {
-            await Share.share(
-                "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
-          },
-          child: Container(
-            height: Adapt.hp(10),
-            width: Adapt.wp(5),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/iconos/share.png"),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget NameuserDes() {
-    return Text(prefs.descripcion,
-        style: TextStyle(
-          fontSize: 15,
-          color: Colors.grey,
-          fontWeight: FontWeight.bold,
-        ));
-  }
-
-  Widget NameuserDesLand() {
-    return Text(prefs.descripcion,
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.grey,
-          fontWeight: FontWeight.bold,
-        ));
   }
 
   Widget newPublication() {
@@ -1641,6 +1556,571 @@ class _Pageppal extends State<Pageppal> {
     );
   }
 
+  Widget Avataruser() {
+    return CircleAvatar(
+        radius: 60.5,
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(prefs.coverPhoto),
+          radius: 57.5,
+        ));
+  }
+
+  Widget AvataruserII() {
+    return CircleAvatar(
+        backgroundColor: Color.fromARGB(255, 15, 208, 225),
+        radius: 20.5,
+        child: CircleAvatar(
+          backgroundColor: Color.fromARGB(255, 15, 208, 225),
+          backgroundImage: NetworkImage(prefs.coverPhoto),
+          radius: 18.5,
+        ));
+  }
+
+  Widget AvataruserIV() {
+    return CircleAvatar(
+        backgroundColor: Color.fromARGB(255, 15, 208, 225),
+        radius: 20.5,
+        child: CircleAvatar(
+          backgroundColor: Color.fromARGB(255, 15, 208, 225),
+          radius: 18.5,
+          backgroundImage: NetworkImage(prefs.coverPhoto),
+        ));
+  }
+
+  Widget BottomPpal() {
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return GestureDetector(
+          onTap: () async {
+            setState(() {});
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: Adapt.hp(35),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.gallery,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.square,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Cropper',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      //showDialog(
+                                      //    context: context,
+                                      //    builder: (BuildContext context) {
+                                      //      return AlertDialog(
+                                      //          content: StatefulBuilder(
+                                      //        builder: (context, setState) {
+                                      //          return newPublication2();
+                                      //        },
+                                      //      ));
+                                      //      //title: newPublication2());
+                                      //    });
+                                      setState(() {});
+                                      return;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/blueGallery.png"),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.camera,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.ratio7x5,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Fun2View',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      // showDialog(
+                                      //     context: context,
+                                      //     builder: (BuildContext context) {
+                                      //       return AlertDialog(
+                                      //           content: StatefulBuilder(
+                                      //         builder: (context, setState) {
+                                      //           return newPublication2();
+                                      //         },
+                                      //       ));
+                                      //       //title: newPublication2());
+                                      //     });
+                                      setState(() {});
+                                      return;
+                                    }
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/Bluecamara.png"),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: Adapt.hp(5)),
+                            SizedBox(height: Adapt.hp(5)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+            radius: 32.5,
+            child: Text("+",
+                style: TextStyle(
+                  fontSize: 29,
+                  fontStyle: FontStyle.normal,
+                  //fontWeight: FontWeight.w700,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                )),
+          ),
+        );
+        ;
+      },
+    );
+  }
+
+  Widget BottomPpalLand() {
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return GestureDetector(
+          onTap: () async {
+            setState(() {});
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.gallery,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.square,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Cropper',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                                content: StatefulBuilder(
+                                              builder: (context, setState) {
+                                                return newPublication2();
+                                              },
+                                            ));
+                                            //title: newPublication2());
+                                          });
+                                      setState(() {
+                                        newPublication2();
+                                      });
+                                      return;
+                                    }
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/blueGallery.png"),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final picker = new ImagePicker();
+                                    final PickedFile? pickedFile =
+                                        await picker.getImage(
+                                            source: ImageSource.camera,
+                                            imageQuality: 100);
+
+                                    if (pickedFile != null) {
+                                      final CroppedFile? croppedFile =
+                                          await ImageCropper().cropImage(
+                                        sourcePath: pickedFile.path,
+                                        aspectRatioPresets: [
+                                          CropAspectRatioPreset.ratio7x5,
+                                          CropAspectRatioPreset.ratio3x2,
+                                          CropAspectRatioPreset.original,
+                                          CropAspectRatioPreset.ratio4x3,
+                                          CropAspectRatioPreset.ratio16x9
+                                        ],
+                                        uiSettings: [
+                                          AndroidUiSettings(
+                                              toolbarTitle: 'Fun2View',
+                                              toolbarColor: Color.fromARGB(
+                                                  255, 126, 230, 251),
+                                              toolbarWidgetColor: Colors.white,
+                                              initAspectRatio:
+                                                  CropAspectRatioPreset
+                                                      .original,
+                                              lockAspectRatio: false),
+                                          IOSUiSettings(
+                                            title: 'Cropper',
+                                          ),
+                                          WebUiSettings(
+                                            context: context,
+                                          ),
+                                        ],
+                                      );
+
+                                      pathImage = croppedFile!.path;
+                                      List<int> bytes =
+                                          await new File(pathImage)
+                                              .readAsBytesSync();
+//
+                                      _imageSend = base64.encode(bytes);
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                                content: StatefulBuilder(
+                                              builder: (context, setState) {
+                                                return newPublication2();
+                                              },
+                                            ));
+                                            //title: newPublication2());
+                                          });
+                                      setState(() {
+                                        newPublication2();
+                                      });
+                                      return;
+                                    }
+                                  },
+                                  child: Container(
+                                    height: Adapt.hp(15),
+                                    width: Adapt.wp(15),
+                                    child: Image.asset(
+                                        "assets/iconos/drawer/Bluecamara.png"),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: Adapt.hp(5)),
+                            SizedBox(height: Adapt.hp(5)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 15, 208, 225),
+            radius: 32.5,
+            child: Text("+",
+                style: TextStyle(
+                  fontSize: 29,
+                  fontStyle: FontStyle.normal,
+                  //fontWeight: FontWeight.w700,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                )),
+          ),
+        );
+        ;
+      },
+    );
+  }
+
+  Widget Cerrar() {
+    return GestureDetector(
+      onTap: () {
+        pathImage = "";
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(content: StatefulBuilder(
+                builder: (context, setState) {
+                  return newPublication2();
+                },
+              ));
+              //title: newPublication2());
+            });
+        setState(() {});
+      },
+      child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: 19.5,
+          child: Center(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 18.5,
+              child: Center(
+                child: Text("x",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget CerrarPubli() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/pantallappal');
+
+        setState(() {});
+      },
+      child: Center(
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: 18.5,
+          child: Center(
+            child: Text("x",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget Nameuser() {
+    return Row(
+      children: [
+        // SizedBox(
+        //   width: Adapt.wp(25),
+        // ),
+        Container(
+          width: Adapt.wp(48),
+          child: Text(prefs.usuario,
+              style: TextStyle(
+                textBaseline: TextBaseline.ideographic,
+                color: Color.fromARGB(255, 15, 208, 225),
+                fontSize: 36,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w700,
+              )),
+        ),
+        SizedBox(
+          width: Adapt.wp(2),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await Share.share(
+                "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
+          },
+          child: Container(
+            height: Adapt.hp(10),
+            width: Adapt.wp(5),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/share.png"),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget Nameuserland() {
+    //User name cuando es horizontal
+    return Row(
+      children: [
+        Container(
+          width: Adapt.wp(48),
+          child: Text(prefs.usuario,
+              style: TextStyle(
+                textBaseline: TextBaseline.ideographic,
+                color: Color.fromARGB(255, 15, 208, 225),
+                fontSize: 36,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w700,
+              )),
+        ),
+        SizedBox(
+          width: Adapt.wp(2),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await Share.share(
+                "Si te gusta mi contenido visita mi perfil  https://design2.fun2view.com/${prefs.nombreUsuario}");
+          },
+          child: Container(
+            height: Adapt.hp(10),
+            width: Adapt.wp(5),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/share.png"),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget NameuserDes() {
+    return Text(prefs.descripcion,
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.grey,
+          fontWeight: FontWeight.bold,
+        ));
+  }
+
+  Widget NameuserDesLand() {
+    return Text(prefs.descripcion,
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.grey,
+          fontWeight: FontWeight.bold,
+        ));
+  }
+
   void _enviarPost() async {
     //String tipoAcceso = "CORREO";
     dynamic respuestas =
@@ -1654,34 +2134,10 @@ class _Pageppal extends State<Pageppal> {
       return Container();
     }
 
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.center,
-          child: Stack(
-            children: [
-              Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator()),
-              Center(
-                child: Container(
-                    height: Adapt.hp(20),
-                    width: Adapt.wp(60),
-                    child: Image.file(File(Picture), fit: BoxFit.cover)),
-              ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            SizedBox(
-              width: Adapt.wp(60),
-            ),
-            Cerrar(),
-          ],
-        )
-      ],
-    );
+    return Container(
+        // height: Adapt.hp(20),
+        // width: Adapt.wp(60),
+        child: Image.file(File(Picture), fit: BoxFit.cover));
   }
 }
 
@@ -1717,7 +2173,7 @@ class Myposts_service {
   Future<dynamic> Post(String Token, String publi, String image) async {
     final prefs = PreferenciasUsuario();
 
-    String url = 'https://design2.fun2view.com/mobile/v1/send-post';
+    String url = '${apiHost}send-post';
 
     final Map<String, String> data = {
       "token": Token,

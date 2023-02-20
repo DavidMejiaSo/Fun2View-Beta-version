@@ -33,6 +33,7 @@ class _walletPageState extends State<walletPage> {
   @override
   void initState() {
     Cuerpo_pantalla();
+    prefs.iniciarPreferencias();
     setState(() {});
     super.initState();
   }

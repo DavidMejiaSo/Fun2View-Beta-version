@@ -2,6 +2,7 @@ import 'dart:convert';
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fun2view_appli/Responsive/Adapt.dart';
 import 'package:fun2view_appli/src/host.dart';
 import 'package:fun2view_appli/src/landing/profile_page.dart';
@@ -45,10 +46,36 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/login'), //<-- SEE HERE
+                child: new Text('No'),
+              ),
+              TextButton(
+                onPressed: () => SystemChannels.platform
+                    .invokeMethod('SystemNavigator.pop'), // <-- SEE HERE
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _accesorios(context),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: _accesorios(context),
+      ),
     );
   }
 
