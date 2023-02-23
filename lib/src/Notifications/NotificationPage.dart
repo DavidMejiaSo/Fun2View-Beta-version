@@ -58,57 +58,61 @@ class _notificationHomeState extends State<notificationHome> {
           key: _key,
           resizeToAvoidBottomInset: true,
           body: RefreshIndicator(
-            color: Color.fromARGB(255, 15, 208, 225),
-            backgroundColor: Color.fromARGB(255, 255, 255, 255),
-            onRefresh: () {
-              setState(() {});
-              Navigator.pushNamed(context, '/NotificationPage');
-              return Future<void>.delayed(const Duration(seconds: 3));
-            },
-            child: Form(
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    onDoubleTap: () {
-                      _key.currentState!.openDrawer();
-                    },
-                    child: SingleChildScrollView(
-                      child: SafeArea(
-                          child: Column(
+              color: Color.fromARGB(255, 15, 208, 225),
+              backgroundColor: Color.fromARGB(255, 255, 255, 255),
+              onRefresh: () {
+                setState(() {});
+                Navigator.pushNamed(context, '/NotificationPage');
+                return Future<void>.delayed(const Duration(seconds: 3));
+              },
+              child: orientation == Orientation.portrait
+                  ? Form(
+                      child: Stack(
                         children: [
-                          SizedBox(
-                            height: Adapt.hp(8),
-                          ),
-                          notificationBack(),
-                          Stack(
-                            children: [
-                              Column(
+                          GestureDetector(
+                            onDoubleTap: () {
+                              _key.currentState!.openDrawer();
+                            },
+                            child: SingleChildScrollView(
+                              child: SafeArea(
+                                  child: Column(
                                 children: [
-                                  SizedBox(height: Adapt.hp(3)),
-                                  (UserSimplePreferences.getPets() ?? [])
-                                          .isEmpty
-                                      ? Notisvacias()
-                                      : listadoNotis(
-                                          UserSimplePreferences.getPets() ?? [])
+                                  SizedBox(
+                                    height: Adapt.hp(8),
+                                  ),
+                                  notificationBack(),
+                                  Stack(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          SizedBox(height: Adapt.hp(3)),
+                                          (UserSimplePreferences.getPets() ??
+                                                      [])
+                                                  .isEmpty
+                                              ? Notisvacias()
+                                              : listadoNotis(
+                                                  UserSimplePreferences
+                                                          .getPets() ??
+                                                      [])
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ],
-                              )
-                            ],
+                              )),
+                            ),
                           ),
+                          Container(
+                              height: Adapt.hp(12),
+                              // color: Colors.red,
+                              child: Center(
+                                  child: orientation == Orientation.portrait
+                                      ? barraPpal()
+                                      : barraPpalLand()))
                         ],
-                      )),
-                    ),
-                  ),
-                  Container(
-                      height: Adapt.hp(12),
-                      // color: Colors.red,
-                      child: Center(
-                          child: orientation == Orientation.portrait
-                              ? barraPpal()
-                              : barraPpalLand()))
-                ],
-              ),
-            ),
-          ),
+                      ),
+                    )
+                  : _noRotate()),
           drawer: Drawer(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
@@ -337,6 +341,31 @@ class _notificationHomeState extends State<notificationHome> {
     );
   }
 
+  Widget _noRotate() {
+    return Container(
+        child: Center(
+      child: Column(
+        children: [
+          Container(
+            height: Adapt.hp(15),
+            width: Adapt.wp(15),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/rotar.png"),
+              ),
+            ),
+          ),
+          Text("Please, rotate your screen",
+              style: TextStyle(
+                color: Color.fromARGB(255, 167, 167, 167),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ))
+        ],
+      ),
+    ));
+  }
+
   Widget barraPpal() {
     return Container(
       color: Colors.white,
@@ -458,21 +487,11 @@ class _notificationHomeState extends State<notificationHome> {
         child: Center(
             child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/iconos/drawer/Nonot.png"),
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              width: Adapt.wp(20),
-              height: Adapt.hp(20),
-            ),
-            Text("No notification yet",
+            Text("You dont have notifications",
                 style: TextStyle(
                   textBaseline: TextBaseline.ideographic,
-                  color: Color.fromARGB(255, 145, 145, 145),
-                  fontSize: 36,
+                  color: Color.fromARGB(255, 31, 30, 30),
+                  fontSize: 26,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,
                 )),

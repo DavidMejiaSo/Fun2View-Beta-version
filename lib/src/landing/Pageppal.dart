@@ -118,7 +118,9 @@ class _Pageppal extends State<Pageppal> {
                     Navigator.pushNamed(context, '/pantallappal');
                     return Future<void>.delayed(const Duration(seconds: 3));
                   },
-                  child: Cuerpo_pantalla()),
+                  child: orientation == Orientation.portrait
+                      ? Cuerpo_pantalla()
+                      : _noRotate()),
               drawer: Drawer(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -280,6 +282,31 @@ class _Pageppal extends State<Pageppal> {
     return GestureDetector(onTap: () {}, child: Container());
   }
 
+  Widget _noRotate() {
+    return Container(
+        child: Center(
+      child: Column(
+        children: [
+          Container(
+            height: Adapt.hp(15),
+            width: Adapt.wp(15),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/rotar.png"),
+              ),
+            ),
+          ),
+          Text("Please, rotate your screen",
+              style: TextStyle(
+                color: Color.fromARGB(255, 167, 167, 167),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ))
+        ],
+      ),
+    ));
+  }
+
   Widget listadoNotis(List items) {
     return SingleChildScrollView(
       child: ListView.builder(
@@ -339,20 +366,10 @@ class _Pageppal extends State<Pageppal> {
         child: Center(
             child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/iconos/drawer/Nonot.png"),
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              width: Adapt.wp(10),
-              height: Adapt.hp(10),
-            ),
-            Text("No notification yet",
+            Text("You dont have notifications",
                 style: TextStyle(
                   textBaseline: TextBaseline.ideographic,
-                  color: Color.fromARGB(255, 145, 145, 145),
+                  color: Color.fromARGB(255, 35, 34, 34),
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,
@@ -1413,15 +1430,22 @@ class _Pageppal extends State<Pageppal> {
               bottomRight: Radius.circular(40))),
       elevation: 10.2,
       child: Container(
-        width: Adapt.wp(88),
+        width: Adapt.wp(90),
         child: Column(
           children: [
             Row(
               children: [
-                Column(
+                SizedBox(
+                  width: Adapt.wp(2),
+                ),
+                Stack(
                   children: [
-                    Align(
-                        alignment: Alignment.topCenter, child: AvataruserIV()),
+                    Container(
+                      height: Adapt.hp(16),
+                      width: Adapt.wp(8),
+                    ),
+                    //color: Colors.red),
+                    AvataruserIV()
                   ],
                 ),
                 SizedBox(
@@ -1972,33 +1996,23 @@ class _Pageppal extends State<Pageppal> {
     return GestureDetector(
       onTap: () {
         pathImage = "";
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(content: StatefulBuilder(
-                builder: (context, setState) {
-                  return newPublication2();
-                },
-              ));
-              //title: newPublication2());
-            });
+        // showDialog(
+        //     context: context,
+        //     builder: (BuildContext context) {
+        //       return AlertDialog(content: StatefulBuilder(
+        //         builder: (context, setState) {
+        //           return newPublication2();
+        //         },
+        //       ));
+        //       //title: newPublication2());
+        //     });
         setState(() {});
       },
-      child: CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 19.5,
-          child: Center(
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 18.5,
-              child: Center(
-                child: Text("x",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
-            ),
+      child: Text("X",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
           )),
     );
   }
@@ -2137,7 +2151,12 @@ class _Pageppal extends State<Pageppal> {
     return Container(
         // height: Adapt.hp(20),
         // width: Adapt.wp(60),
-        child: Image.file(File(Picture), fit: BoxFit.cover));
+        child: Stack(
+      children: [
+        Image.file(File(Picture), fit: BoxFit.cover),
+        Align(alignment: Alignment.topRight, child: Cerrar())
+      ],
+    ));
   }
 }
 
@@ -2238,38 +2257,14 @@ class ChangeUserInfoService {
         'Authorization': 'Bearer ${prefs.token}',
       },
     );
-    print(res.statusCode);
-    print(datadecode);
+    //print(res.statusCode);
+    //print(datadecode);
 
     Map respuesta = json.decode(res.body);
-    print(respuesta);
+    // print(respuesta);
     return respuesta;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //if (respuesta is String) {
 //  print(respuesta);

@@ -57,7 +57,9 @@ class _walletPageState extends State<walletPage> {
                   Navigator.pushNamed(context, '/pantallappal');
                   return Future<void>.delayed(const Duration(seconds: 3));
                 },
-                child: Cuerpo_pantalla()),
+                child: orientation == Orientation.portrait
+                    ? Cuerpo_pantalla()
+                    : _noRotate()),
             drawer: Drawer(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -194,6 +196,31 @@ class _walletPageState extends State<walletPage> {
       },
     );
     ;
+  }
+
+  Widget _noRotate() {
+    return Container(
+        child: Center(
+      child: Column(
+        children: [
+          Container(
+            height: Adapt.hp(15),
+            width: Adapt.wp(15),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/iconos/rotar.png"),
+              ),
+            ),
+          ),
+          Text("Please, rotate your screen",
+              style: TextStyle(
+                color: Color.fromARGB(255, 167, 167, 167),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ))
+        ],
+      ),
+    ));
   }
 
   Widget listadoNotis(List items) {
